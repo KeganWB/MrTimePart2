@@ -20,14 +20,20 @@ import com.google.firebase.firestore.firestore
 class MainActivity : AppCompatActivity() {
     val db = Firebase.firestore
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
 binding.buttonCategory.setOnClickListener() {
     setContentView(R.layout.activity_category)
 }
+        binding.buttonTimeSheet.setOnClickListener(){
+            setContentView(R.layout.activity_time_sheet)
+        }
 
     }
 }
