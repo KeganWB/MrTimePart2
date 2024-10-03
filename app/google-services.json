@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79629738686",
+    "project_id": "mrtimepart2",
+    "storage_bucket": "mrtimepart2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79629738686:android:2ee5fdd18bf1c7c97eb4ef",
+        "android_client_info": {
+          "package_name": "com.example.mrtimepart2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0_3_2V4VSaq9FHFgLHI4BqfW7RHIpmpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
