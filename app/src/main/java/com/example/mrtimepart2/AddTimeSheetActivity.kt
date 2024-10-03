@@ -1,4 +1,7 @@
 package com.example.mrtimepart2
 
-class AddTimeSheetActivity {
+import androidx.fragment.app.DialogFragment
+
+class AddTimeSheetActivity: DialogFragment() {
+
 }
