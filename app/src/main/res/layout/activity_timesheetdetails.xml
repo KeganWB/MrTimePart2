@@ -4,23 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/titleAdd"
+    <EditText
+        android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:editable="false"
-        android:text="New Time Sheet" />
-
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:hint="Name" />
 
     <EditText
-        android:id="@+id/editTextTime"
+        android:id="@+id/editTextStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time" />
+        android:hint="Start Time"
+        android:focusable="false"/>
+
+    <EditText
+        android:id="@+id/editTextEndTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="End Time"
+        android:focusable="false"/>
+
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description" />
+
+    <Spinner
+        android:id="@+id/spinner_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Button to add or take a photo -->
+    <Button
+        android:id="@+id/buttonAddPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Photo" />
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
 </LinearLayout>
