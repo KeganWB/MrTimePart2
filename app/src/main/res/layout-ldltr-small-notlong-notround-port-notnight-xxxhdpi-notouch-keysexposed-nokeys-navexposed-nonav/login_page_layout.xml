@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212"
+    android:padding="16dp"
+    tools:ignore="MissingDefaultResource">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/mr_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sign_in_text"
+        android:layout_width="116dp"
+        android:layout_height="48dp"
+        android:text="Sign In"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="194dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="253dp"
+        android:layout_height="24dp"
+        android:text="Hi there! Nice to see you again"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="61dp"
+        tools:layout_editor_absoluteY="139dp"
+        tools:ignore="MissingConstraints" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_text_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="28dp"
+        app:boxStrokeColor="@android:color/white"
+        app:hintTextColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.546"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcome_text">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_text_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:boxStrokeColor="@android:color/white"
+        app:hintTextColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@id/email_text_input_layout"
+        app:layout_constraintStart_toStartOf="@id/email_text_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/email_text_input_layout"
+        app:passwordToggleEnabled="true">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <EditText
+        android:id="@+id/password_edit_text"
+        android:layout_width="334dp"
+        android:layout_height="68dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:text="Enter Password"
+        android:textColor="@android:color/white"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="342dp" />
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#F44336"
+        android:text="Sign In"
+        android:textColor="@android:color/white"
+        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteY="422dp"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/email_edit_text"
+        android:layout_width="332dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="376dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:text="      Enter Email"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
