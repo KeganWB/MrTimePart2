@@ -9,16 +9,18 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 
 class AddTimeSheetActivity : DialogFragment() {
+
     companion object {
         private const val REQUEST_CAMERA = 100
         private const val REQUEST_GALLERY = 101
     }
-
+    private lateinit var imagePreview: ImageView
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater
         val builder = AlertDialog.Builder(requireContext())
@@ -32,6 +34,7 @@ class AddTimeSheetActivity : DialogFragment() {
         val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
         val buttonAddPhoto = dialogView.findViewById<Button>(R.id.buttonAddPhoto)
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
+        imagePreview = dialogView.findViewById(R.id.imagePrev)
 
         // Set up button to take or select a photo
         buttonAddPhoto.setOnClickListener {
@@ -104,19 +107,23 @@ class AddTimeSheetActivity : DialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == -1) { // -1 corresponds to Activity.RESULT_OK
+        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_CAMERA -> {
                     val imageBitmap = data?.extras?.get("data") as? Bitmap
                     imageBitmap?.let {
-                        // Handle the image from the camera, e.g., display in an ImageView
+                        // Display the captured image in the ImageView
+                        imagePreview.setImageBitmap(it)
+                        imagePreview.visibility = ImageView.VISIBLE
                         Toast.makeText(requireContext(), "Photo captured", Toast.LENGTH_SHORT).show()
                     }
                 }
                 REQUEST_GALLERY -> {
                     val selectedImageUri = data?.data
                     selectedImageUri?.let {
-                        // Handle the image from the gallery, e.g., display in an ImageView
+                        // Load and display the selected image in the ImageView
+                        imagePreview.setImageURI(it)
+                        imagePreview.visibility = ImageView.VISIBLE
                         Toast.makeText(requireContext(), "Photo selected", Toast.LENGTH_SHORT).show()
                     }
                 }
