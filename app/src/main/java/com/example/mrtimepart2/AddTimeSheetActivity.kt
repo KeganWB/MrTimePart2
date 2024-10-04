@@ -102,11 +102,8 @@ class AddTimeSheetActivity : DialogFragment() {
                 image = imageByteArray // Add the image ByteArray if available
             )
 
-            // Pass TimeSheetData to the target activity
-            val intent = Intent(requireContext(), TimeSheetActivity::class.java).apply {
-                putExtra("timeSheetData", timeSheetData) // Put Parcelable object
-            }
-            startActivity(intent)
+            // Notify the listener about the new timesheet data
+            listener?.onTimesheetAdded(timeSheetData)
 
             // Dismiss the dialog after submitting
             dismiss()
@@ -147,5 +144,14 @@ class AddTimeSheetActivity : DialogFragment() {
                 }
             }
         }
+    }
+    interface OnTimesheetAddedListener {
+        fun onTimesheetAdded(timeSheetData: TimeSheetData)
+    }
+
+    private var listener: OnTimesheetAddedListener? = null
+
+    fun setOnTimesheetAddedListener(listener: OnTimesheetAddedListener) {
+        this.listener = listener
     }
 }
