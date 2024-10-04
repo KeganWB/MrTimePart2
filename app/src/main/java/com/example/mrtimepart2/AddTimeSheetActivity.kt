@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -37,6 +38,15 @@ class AddTimeSheetActivity : DialogFragment() {
         val buttonAddPhoto = dialogView.findViewById<Button>(R.id.buttonAddPhoto)
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
         imagePreview = dialogView.findViewById(R.id.imagePrev)
+
+        //Add Spinner Default Categories
+        val categories = listOf("Other")
+        // Create an ArrayAdapter using the default spinner layout
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+        spinnerCategory.adapter = adapter
 
         // Set up button to take or select a photo
         buttonAddPhoto.setOnClickListener {

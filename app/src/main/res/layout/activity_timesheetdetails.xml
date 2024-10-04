@@ -8,21 +8,20 @@
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoText="false"
         android:hint="Name" />
 
     <EditText
         android:id="@+id/editTextStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Start Time"
-        android:focusable="false"/>
+        android:hint="Start Time" />
 
     <EditText
         android:id="@+id/editTextEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="End Time"
-        android:focusable="false"/>
+        android:hint="End Time" />
 
     <EditText
         android:id="@+id/editTextDescription"
@@ -54,4 +53,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />
+
 </LinearLayout>
