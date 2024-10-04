@@ -2,6 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mrtimepart2">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -28,6 +36,26 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".TimeSheetActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MrTimePart2">
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddTimeSheetActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MrTimePart2">
+        <intent-filter>
+            <action android:name="android.intent.action.DEFAULT" />
+        </intent-filter>
         </activity>
 
     </application>
