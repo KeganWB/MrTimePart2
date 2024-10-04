@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import java.io.ByteArrayOutputStream
 
 class AddTimeSheetActivity : DialogFragment() {
 
@@ -66,29 +68,35 @@ class AddTimeSheetActivity : DialogFragment() {
 
         // Add custom listener for submit button
         buttonSubmit.setOnClickListener {
-            // Collect the entered information and convert to string
+            // Collect the entered information
             val name = editTextName.text.toString()
             val startTime = editTextStartTime.text.toString()
             val endTime = editTextEndTime.text.toString()
             val description = editTextDescription.text.toString()
             val category = spinnerCategory.selectedItem.toString()
 
-            // Create a bundle to send data
-            val bundle = Bundle().apply {
-                putString("name", name)
-                putString("startTime", startTime)
-                putString("endTime", endTime)
-                putString("description", description)
-                putString("category", category)
+            // Convert the image to ByteArray (if available)
+            val imageByteArray = (imagePreview.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                stream.toByteArray()
             }
 
-            // Create an Intent to send the data back
-            val intent = Intent().apply {
-                putExtras(bundle)
-            }
+            // Create a TimeSheetData object
+            val timeSheetData = TimeSheetData(
+                name = name,
+                startTime = startTime,
+                endTime = endTime,
+                description = description,
+                category = category,
+                image = imageByteArray // Add the image ByteArray if available
+            )
 
-            // Send the bundle back to the TimesheetActivity
-            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+            // Pass TimeSheetData to the target activity
+            val intent = Intent(requireContext(), TimeSheetActivity::class.java).apply {
+                putExtra("timeSheetData", timeSheetData) // Put Parcelable object
+            }
+            startActivity(intent)
 
             // Dismiss the dialog after submitting
             dismiss()
