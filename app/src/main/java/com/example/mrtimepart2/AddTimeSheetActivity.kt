@@ -1,21 +1,19 @@
 package com.example.mrtimepart2
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 
-class AddTimeSheetActivity: DialogFragment() {
+class AddTimeSheetActivity : DialogFragment() {
     companion object {
         private const val REQUEST_CAMERA = 100
         private const val REQUEST_GALLERY = 101
@@ -23,13 +21,15 @@ class AddTimeSheetActivity: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater
+        val builder = AlertDialog.Builder(requireContext())
         val dialogView = inflater.inflate(R.layout.activity_timesheetdetails, null)
 
+        // Find your views
         val editTextName = dialogView.findViewById<EditText>(R.id.editTextName)
         val editTextStartTime = dialogView.findViewById<EditText>(R.id.editTextStartTime)
         val editTextEndTime = dialogView.findViewById<EditText>(R.id.editTextEndTime)
         val editTextDescription = dialogView.findViewById<EditText>(R.id.editTextDescription)
-        val editTextCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
+        val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
         val buttonAddPhoto = dialogView.findViewById<Button>(R.id.buttonAddPhoto)
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
 
@@ -61,25 +61,44 @@ class AddTimeSheetActivity: DialogFragment() {
             builder.show()
         }
 
-        // Set up submit button to handle adding the new timesheet
+        // Add custom listener for submit button
         buttonSubmit.setOnClickListener {
+            // Collect the entered information and convert to string
             val name = editTextName.text.toString()
             val startTime = editTextStartTime.text.toString()
             val endTime = editTextEndTime.text.toString()
             val description = editTextDescription.text.toString()
-            val category = editTextCategory.selectedItem.toString()
+            val category = spinnerCategory.selectedItem.toString()
 
-            // Validate input and add the timesheet (pass back to activity or save directly)
+            // Create a bundle to send data
+            val bundle = Bundle().apply {
+                putString("name", name)
+                putString("startTime", startTime)
+                putString("endTime", endTime)
+                putString("description", description)
+                putString("category", category)
+            }
 
+            // Create an Intent to send the data back
+            val intent = Intent().apply {
+                putExtras(bundle)
+            }
 
-            dismiss() // Close the dialog after submitting
+            // Send the bundle back to the TimesheetActivity
+            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+
+            // Dismiss the dialog after submitting
+            dismiss()
         }
 
-        return AlertDialog.Builder(requireActivity())
-            .setView(dialogView)
+        // Remove the default positive button and keep only the Cancel button
+        builder.setView(dialogView)
             .setTitle("Add New Timesheet")
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            .create()
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss() // This will close the dialog without doing anything
+            }
+
+        return builder.create()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
