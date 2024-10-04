@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
 binding.buttonCategory.setOnClickListener() {
     setContentView(R.layout.activity_category)
 }
+binding.buttonTimeSheet.setOnClickListener(){
+    setContentView((R.layout.activity_timesheet))
+}
 
     }
 }
