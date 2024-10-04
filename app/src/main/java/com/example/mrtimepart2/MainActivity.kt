@@ -1,5 +1,6 @@
 package com.example.mrtimepart2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 binding.buttonCategory.setOnClickListener() {
-    setContentView(R.layout.activity_category)
+    val intent = Intent(this, Category::class.java)
+    startActivity(intent)
 }
 
     }
