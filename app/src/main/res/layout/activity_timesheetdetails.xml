@@ -31,7 +31,7 @@
         android:hint="Description" />
 
     <Spinner
-        android:id="@+id/spinner_category"
+        android:id="@+id/spinnerCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

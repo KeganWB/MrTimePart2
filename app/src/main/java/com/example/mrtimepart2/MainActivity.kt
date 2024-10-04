@@ -1,5 +1,6 @@
 package com.example.mrtimepart2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,7 +30,8 @@ binding.buttonCategory.setOnClickListener() {
     setContentView(R.layout.activity_category)
 }
 binding.buttonTimeSheet.setOnClickListener(){
-    setContentView((R.layout.activity_timesheet))
+    val intent = Intent(this, TimeSheetActivity::class.java)
+    startActivity(intent)
 }
 
     }
