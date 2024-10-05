@@ -11,21 +11,15 @@
         android:layout_height="30dp" />
 
     <ScrollView
+        android:id="@+id/scrollTimeSheets"
         android:layout_width="match_parent"
         android:layout_height="422dp">
 
         <LinearLayout
+            android:id="@+id/timesheetContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars" />
-
-        </LinearLayout>
+            android:orientation="vertical"/>
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

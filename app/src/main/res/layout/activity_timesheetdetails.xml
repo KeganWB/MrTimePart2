@@ -5,30 +5,40 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name" />
+    android:id="@+id/editTextName"
+    android:hint="TimeSheet Name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:inputType="textNoSuggestions|textVisiblePassword"
+    android:longClickable="false"
+    android:textIsSelectable="false" />
 
     <EditText
         android:id="@+id/editTextStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Start Time"
-        android:focusable="false"/>
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <EditText
         android:id="@+id/editTextEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="End Time"
-        android:focusable="false"/>
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Description" />
+        android:hint="Description"
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <Spinner
         android:id="@+id/spinnerCategory"
@@ -41,10 +51,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Photo" />
+    <ImageView
+        android:id="@+id/imagePrev"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:contentDescription="Image preview"/>
 
     <Button
         android:id="@+id/buttonSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />
+
 </LinearLayout>
