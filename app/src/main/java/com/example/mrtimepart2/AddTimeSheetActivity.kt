@@ -40,7 +40,7 @@ class AddTimeSheetActivity : DialogFragment() {
         imagePreview = dialogView.findViewById(R.id.imagePrev)
 
         //Add Spinner Default Categories
-        val categories = listOf("Other")
+        val categories = listOf("Other","Kegan")
         // Create an ArrayAdapter using the default spinner layout
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
         // Specify the layout to use when the list of choices appears
