@@ -3,6 +3,7 @@ package com.example.mrtimepart2
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -20,6 +21,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import java.io.ByteArrayOutputStream
+import java.util.Calendar
 
 class AddTimeSheetActivity : DialogFragment() {
 
@@ -43,10 +45,10 @@ class AddTimeSheetActivity : DialogFragment() {
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
         imagePreview = dialogView.findViewById(R.id.imagePrev)
 
-        //Keyboard pop up
 
 
 
+        // Keyboard pop up
         editTextName.setOnClickListener(){
                 // Get the InputMethodManager from the context
             editTextName.requestFocus()
@@ -56,6 +58,13 @@ class AddTimeSheetActivity : DialogFragment() {
                 //imm.hideSoftInputFromWindow(v.windowToken, 0)
 
         }
+        editTextStartTime.setOnClickListener {
+            showTimePickerDialog(editTextStartTime)
+        }
+        editTextEndTime.setOnClickListener {
+            showTimePickerDialog(editTextEndTime)
+        }
+
         //Add Spinner Default Categories
         val categories = listOf("Other","Kegan")
         // Create an ArrayAdapter using the default spinner layout
@@ -170,5 +179,19 @@ class AddTimeSheetActivity : DialogFragment() {
 
     fun setOnTimesheetAddedListener(listener: OnTimesheetAddedListener) {
         this.listener = listener
+    }
+
+    private fun showTimePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
+            // Format the selected time and display it in the EditText
+            val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+            editText.setText(formattedTime)
+        }, hour, minute, true) // true for 24-hour format
+
+        timePickerDialog.show()
     }
 }
