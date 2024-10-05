@@ -18,18 +18,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Start Time"
-        android:inputType="textNoSuggestions|textVisiblePassword"
-        android:longClickable="false"
-        android:textIsSelectable="false"/>
+        android:focusable="false"
+        android:inputType="none"
+        android:clickable="true"
+        android:textIsSelectable="false"
+        android:longClickable="false"/>
 
     <EditText
         android:id="@+id/editTextEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="End Time"
-        android:inputType="textNoSuggestions|textVisiblePassword"
-        android:longClickable="false"
-        android:textIsSelectable="false"/>
+        android:focusable="false"
+        android:inputType="none"
+        android:clickable="true"
+        android:textIsSelectable="false"
+        android:longClickable="false"/>
 
     <EditText
         android:id="@+id/editTextDescription"
