@@ -3,17 +3,21 @@ package com.example.mrtimepart2
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import java.io.ByteArrayOutputStream
 
@@ -39,6 +43,19 @@ class AddTimeSheetActivity : DialogFragment() {
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
         imagePreview = dialogView.findViewById(R.id.imagePrev)
 
+        //Keyboard pop up
+
+
+
+        editTextName.setOnClickListener(){
+                // Get the InputMethodManager from the context
+            editTextName.requestFocus()
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editTextName, InputMethodManager.SHOW_IMPLICIT)
+                // Hide the soft keyboard
+                //imm.hideSoftInputFromWindow(v.windowToken, 0)
+
+        }
         //Add Spinner Default Categories
         val categories = listOf("Other","Kegan")
         // Create an ArrayAdapter using the default spinner layout

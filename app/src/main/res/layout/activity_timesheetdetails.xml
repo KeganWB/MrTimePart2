@@ -5,29 +5,40 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoText="false"
-        android:hint="Name" />
+    android:id="@+id/editTextName"
+    android:hint="TimeSheet Name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:inputType="textNoSuggestions|textVisiblePassword"
+    android:longClickable="false"
+    android:textIsSelectable="false" />
 
     <EditText
         android:id="@+id/editTextStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Start Time" />
+        android:hint="Start Time"
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <EditText
         android:id="@+id/editTextEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="End Time" />
+        android:hint="End Time"
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Description" />
+        android:hint="Description"
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:longClickable="false"
+        android:textIsSelectable="false"/>
 
     <Spinner
         android:id="@+id/spinnerCategory"
