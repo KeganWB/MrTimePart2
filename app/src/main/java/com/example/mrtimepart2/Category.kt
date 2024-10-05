@@ -6,10 +6,11 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mrtimepart2.ui.theme.CategoryAdapter // Assuming this is your adapter
+import com.example.mrtimepart2.ui.theme.CategoryAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 
@@ -20,15 +21,17 @@ class Category : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var categoryList: MutableList<String>
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var submitButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_category) // Set the layout
+        setContentView(R.layout.activity_category)
 
         // Initialize views
         categoryTextInput = findViewById(R.id.category_text_input)
-        addButton = findViewById(R.id.add_category_btn) // Use the correct ID
+        addButton = findViewById(R.id.add_category_btn)
         recyclerView = findViewById(R.id.recyclerView)
+        submitButton = findViewById(R.id.categorySubmitBtn)
 
         // Initialize RecyclerView
         categoryList = mutableListOf()
@@ -36,22 +39,63 @@ class Category : AppCompatActivity() {
         recyclerView.adapter = categoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Initially hide the input field AND the submit button
+        categoryTextInput.visibility = View.GONE
+        submitButton.visibility = View.GONE
+
         addButton.setOnClickListener {
-            Log.d("clicked","FAB pressed")
+            Log.d("clicked", "FAB pressed")
+
+            // Show the input field AND the submit button
             categoryTextInput.visibility = View.VISIBLE
+            submitButton.visibility = View.VISIBLE
+
+            // Hide the Edit and Delete buttons in the RecyclerView
+            categoryAdapter.showEditDeleteButtons = false
+            categoryAdapter.notifyDataSetChanged()
+
             categoryTextInput.requestFocus()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(categoryTextInput, InputMethodManager.SHOW_IMPLICIT)
         }
 
+        // Listener for the Submit button
+        submitButton.setOnClickListener {
+            val categoryName = categoryTextInput.text.toString()
+            categoryList.add(categoryName)
+            categoryAdapter.notifyItemInserted(categoryList.size - 1)
+            categoryTextInput.text?.clear()
+
+            // Hide the input field AND the submit button
+            categoryTextInput.visibility = View.GONE
+            submitButton.visibility = View.GONE
+
+            // Show the Edit and Delete buttons again
+            categoryAdapter.showEditDeleteButtons = true
+            categoryAdapter.notifyDataSetChanged()
+
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(categoryTextInput.windowToken, 0)
+        }
+
+        // Listener for the "Done" action on the keyboard
         categoryTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val categoryName = categoryTextInput.text.toString()
                 categoryList.add(categoryName)
                 categoryAdapter.notifyItemInserted(categoryList.size - 1)
                 categoryTextInput.text?.clear()
+
+                // Hide the input field and hide the keyboard
+                categoryTextInput.visibility = View.GONE
+                submitButton.visibility = View.GONE
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(categoryTextInput.windowToken, 0)
+
+                // Show the Edit and Delete buttons again
+                categoryAdapter.showEditDeleteButtons = true
+                categoryAdapter.notifyDataSetChanged()
+
                 true
             } else {
                 false
