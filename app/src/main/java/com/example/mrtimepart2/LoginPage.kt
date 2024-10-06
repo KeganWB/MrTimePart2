@@ -64,12 +64,14 @@ fun LoginPageLayout(context: Context) {
 
             // Logo
             val logo = ImageView(ctx).apply {
-                // ... set image source (e.g.,setImageResource(R.drawable.your_logo)) ...
+                setImageResource(R.drawable.mr_time_removebg)
             }
             mainLayout.addView(logo, LinearLayout.LayoutParams(
-                200, 200
+                500,  // Set width to 100dp
+                500  // Set height to 100dp
             ).apply {
                 topMargin = 50
+                gravity = Gravity.CENTER_HORIZONTAL
                 weight = 2f
             })
 
@@ -136,14 +138,14 @@ fun LoginPageLayout(context: Context) {
                 setBackgroundColor(Color.parseColor("#F44336"))
                 setTextColor(Color.WHITE)
                 setOnClickListener {
-                    val email = editTextEmail.text.toString().trim().toLowerCase() // Trim and lowercase
-                    val password = editTextPassword.text.toString().trim() // Trim
+                    val email = editTextEmail.text.toString().trim().toLowerCase()
+                    val password = editTextPassword.text.toString().trim()
 
                     val sharedPref = ctx.getSharedPreferences("user_data", Context.MODE_PRIVATE)
-                    val savedEmail = sharedPref.getString("email", "").orEmpty().toLowerCase() // Retrieve and lowercase
+                    val savedEmail = sharedPref.getString("email", "").orEmpty().toLowerCase()
                     val savedPassword = sharedPref.getString("password", "").orEmpty()
 
-                    Log.d("LoginPage", "Entered email: $email, saved email: $savedEmail") // Log for debugging
+                    Log.d("LoginPage", "Entered email: $email, saved email: $savedEmail")
                     Log.d("LoginPage", "Entered password: $password, saved password: $savedPassword")
 
                     if (email == savedEmail && password == savedPassword) {
