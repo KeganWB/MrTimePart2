@@ -26,13 +26,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-binding.buttonCategory.setOnClickListener() {
-    setContentView(R.layout.activity_category)
-}
+
 binding.buttonTimeSheet.setOnClickListener(){
     val intent = Intent(this, TimeSheetActivity::class.java)
     startActivity(intent)
 }
+binding.buttonCategory.setOnClickListener {
+            val intent = Intent(this, Category::class.java)
+            startActivity(intent)
+        }
 
     }
 }

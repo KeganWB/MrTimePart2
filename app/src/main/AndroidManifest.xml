@@ -32,6 +32,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Category"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MrTimePart2">
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT" />
+
+            </intent-filter>
+        </activity>
 
         <!-- Set HoursActivity as the launcher activity -->
         <activity android:name=".HoursActivity"
