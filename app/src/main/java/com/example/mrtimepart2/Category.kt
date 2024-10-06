@@ -1,6 +1,7 @@
 package com.example.mrtimepart2
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,7 +27,7 @@ class Category : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
-
+        val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
         // Initialize views
         categoryTextInput = findViewById(R.id.category_text_input)
         addButton = findViewById(R.id.add_category_btn)
@@ -42,6 +43,10 @@ class Category : AppCompatActivity() {
         // Initially hide the input field AND the submit button
         categoryTextInput.visibility = View.GONE
         submitButton.visibility = View.GONE
+
+        fabBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
 
         addButton.setOnClickListener {
             Log.d("clicked", "FAB pressed")

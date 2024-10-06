@@ -18,14 +18,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MrTimePart2"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
 
         <activity
             android:name=".LoginPage"
             android:exported="true"
             android:label="@string/title_activity_login_page"
-            android:theme="@style/Theme.MrTimePart2">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MrTimePart2.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -47,7 +47,7 @@
             android:name=".Category"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MrTimePart2">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
 
@@ -68,7 +68,7 @@
             android:name=".TimeSheetActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MrTimePart2">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
@@ -77,7 +77,7 @@
             android:name=".AddTimeSheetActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MrTimePart2"
+            android:theme="@style/AppTheme"
             tools:ignore="Instantiatable">
         <intent-filter>
             <action android:name="android.intent.action.DEFAULT" />
@@ -89,7 +89,7 @@
             android:name=".CreateAccountActivity"
             android:exported="false"
             android:label="@string/title_activity_create_account"
-            android:theme="@style/Theme.MrTimePart2" />
+            android:theme="@style/AppTheme" />
 
     </application>
 

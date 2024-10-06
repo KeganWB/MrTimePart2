@@ -1,5 +1,6 @@
 package com.example.mrtimepart2
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +23,11 @@ class TimeSheetActivity: AppCompatActivity() {
 
         timesheetContainer = findViewById(R.id.timesheetContainer)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
+        val fabBack = findViewById<FloatingActionButton>(R.id.backArrow)
 
+        fabBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
         fabAdd.setOnClickListener {
             val addTimeSheetFragment = AddTimeSheetActivity()
             addTimeSheetFragment.setOnTimesheetAddedListener(object : AddTimeSheetActivity.OnTimesheetAddedListener {
