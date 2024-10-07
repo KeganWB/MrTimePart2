@@ -38,4 +38,18 @@
         app:backgroundTint="@color/TextColour"
         app:srcCompat="@android:drawable/ic_menu_add" />
 
+    <TextView
+        android:id="@+id/textViewSort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:text="Sort By "
+        android:textColor="#FFFFFF" />
+
+    <Spinner
+        android:id="@+id/spinnerSort"
+        android:layout_width="134dp"
+        android:layout_height="43dp"
+        android:background="#E35A66" />
+
 </LinearLayout>

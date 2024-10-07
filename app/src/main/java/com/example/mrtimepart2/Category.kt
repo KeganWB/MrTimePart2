@@ -2,18 +2,24 @@ package com.example.mrtimepart2
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mrtimepart2.ui.theme.CategoryAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 
 class Category : AppCompatActivity() {
 
@@ -23,10 +29,13 @@ class Category : AppCompatActivity() {
     private lateinit var categoryList: MutableList<String>
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var submitButton: Button
+    private lateinit var sharedPreferences: SharedPreferences
+    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
+        sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
         val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
         // Initialize views
         categoryTextInput = findViewById(R.id.category_text_input)
@@ -36,7 +45,7 @@ class Category : AppCompatActivity() {
 
         // Initialize RecyclerView
         categoryList = mutableListOf()
-        categoryAdapter = CategoryAdapter(categoryList)
+        categoryAdapter = CategoryAdapter(categoryList,sharedPreferences)
         recyclerView.adapter = categoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -44,6 +53,8 @@ class Category : AppCompatActivity() {
         categoryTextInput.visibility = View.GONE
         submitButton.visibility = View.GONE
 
+
+        retrieveCategory()
         fabBack.setOnClickListener{
             startActivity(Intent(this, MainActivity::class.java))
         }
@@ -68,6 +79,7 @@ class Category : AppCompatActivity() {
         submitButton.setOnClickListener {
             val categoryName = categoryTextInput.text.toString()
             categoryList.add(categoryName)
+            saveCategory()
             categoryAdapter.notifyItemInserted(categoryList.size - 1)
             categoryTextInput.text?.clear()
 
@@ -107,4 +119,24 @@ class Category : AppCompatActivity() {
             }
         }
     }
+    // saves to gson
+    private fun saveCategory() {
+        val jsonString = gson.toJson(categoryList) // Serialize categoryList
+        with(sharedPreferences.edit()) {
+            putString("CATEGORY_LIST", jsonString) // Save to SharedPreferences
+            apply()
+        }
+    }
+
+    // Retrieves the category list from SharedPreferences
+    private fun retrieveCategory() {
+        val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
+        if (!jsonString.isNullOrEmpty()) {
+            val type = object : TypeToken<MutableList<String>>() {}.type
+            val savedCategoryList: MutableList<String> = gson.fromJson(jsonString, type)
+            categoryList.addAll(savedCategoryList)
+            categoryAdapter.notifyDataSetChanged() // Update the adapter
+        }
+    }
 }
+
