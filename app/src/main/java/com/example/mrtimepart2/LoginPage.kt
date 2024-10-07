@@ -57,7 +57,7 @@ fun LoginPageLayout(context: Context) {
         factory = { ctx ->
             val mainLayout = LinearLayout(ctx).apply {
                 orientation = LinearLayout.VERTICAL
-                setBackgroundColor(Color.parseColor("#222121"))
+                setBackgroundColor(Color.parseColor("#0C1424"))
                 gravity = Gravity.CENTER_HORIZONTAL
                 setPadding(40, 0, 40, 0)
             }
@@ -76,7 +76,7 @@ fun LoginPageLayout(context: Context) {
             // Sign In Text
             val signInText = TextView(ctx).apply {
                 text = "Sign In"
-                setTextColor(Color.WHITE)
+                setTextColor(Color.parseColor("#e45a66"))
                 textSize = 24f
             }
             mainLayout.addView(signInText, LinearLayout.LayoutParams(
@@ -90,7 +90,7 @@ fun LoginPageLayout(context: Context) {
             // Welcome Text
             val welcomeText = TextView(ctx).apply {
                 text = "Hi there! Nice to see you again"
-                setTextColor(Color.LTGRAY)
+                setTextColor(Color.parseColor("#e45a66"))
                 textSize = 16f
             }
             mainLayout.addView(welcomeText, LinearLayout.LayoutParams(
@@ -104,7 +104,7 @@ fun LoginPageLayout(context: Context) {
             val editTextEmail = EditText(ctx).apply {
                 hint = "Email"
                 setHintTextColor(Color.GRAY)
-                setTextColor(Color.WHITE)
+                setTextColor(Color.parseColor("#e45a66"))
             }
             mainLayout.addView(editTextEmail, LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -118,7 +118,7 @@ fun LoginPageLayout(context: Context) {
             val editTextPassword = EditText(ctx).apply {
                 hint = "Password"
                 setHintTextColor(Color.GRAY)
-                setTextColor(Color.WHITE)
+                setTextColor(Color.parseColor("#e45a66"))
                 inputType = InputType.TYPE_CLASS_TEXT or
                         InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
@@ -133,8 +133,8 @@ fun LoginPageLayout(context: Context) {
             // Sign In Button
             val buttonSignIn = Button(ctx).apply {
                 text = "Sign In"
-                setBackgroundColor(Color.parseColor("#F44336"))
-                setTextColor(Color.WHITE)
+                setBackgroundColor(Color.parseColor("#e45a66"))
+                setTextColor(Color.parseColor("#FFFFFFFF"))
                 setOnClickListener {
                     val email = editTextEmail.text.toString().trim().toLowerCase() // Trim and lowercase
                     val password = editTextPassword.text.toString().trim() // Trim
@@ -165,8 +165,8 @@ fun LoginPageLayout(context: Context) {
             // Create Account Button
             val buttonCreateAccount = Button(ctx).apply {
                 text = "Create Account"
-                setBackgroundColor(Color.parseColor("#4CAF50"))
-                setTextColor(Color.WHITE)
+                setBackgroundColor(Color.parseColor("#e45a66"))
+                setTextColor(Color.parseColor("#FFFFFFFF"))
                 setOnClickListener {
                     ctx.startActivity(Intent(ctx, CreateAccountActivity::class.java))
                 }

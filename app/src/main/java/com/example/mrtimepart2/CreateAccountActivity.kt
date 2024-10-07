@@ -45,7 +45,7 @@ class CreateAccountActivity : ComponentActivity() {
             factory = { ctx ->
                 val mainLayout = LinearLayout(ctx).apply {
                     orientation = LinearLayout.VERTICAL
-                    setBackgroundColor(Color.parseColor("#222121"))
+                    setBackgroundColor(Color.parseColor("#0C1424"))
                     gravity = Gravity.CENTER_HORIZONTAL
                     setPadding(40, 0, 40, 0)
                 }
@@ -53,7 +53,7 @@ class CreateAccountActivity : ComponentActivity() {
                 // Create Account Text
                 val createAccountText = TextView(ctx).apply {
                     text = "Create Account"
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                     textSize = 24f
                 }
                 mainLayout.addView(createAccountText, LinearLayout.LayoutParams(
@@ -68,7 +68,7 @@ class CreateAccountActivity : ComponentActivity() {
                 val editTextEmail = EditText(ctx).apply {
                     hint = "Email"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                 }
                 mainLayout.addView(editTextEmail, LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -82,7 +82,7 @@ class CreateAccountActivity : ComponentActivity() {
                 val editTextPassword = EditText(ctx).apply {
                     hint = "Password"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                     inputType = InputType.TYPE_CLASS_TEXT or
                             InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
@@ -98,7 +98,7 @@ class CreateAccountActivity : ComponentActivity() {
                 val editTextConfirmPassword = EditText(ctx).apply {
                     hint = "Confirm Password"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                     inputType = InputType.TYPE_CLASS_TEXT or
                             InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
@@ -113,8 +113,8 @@ class CreateAccountActivity : ComponentActivity() {
                 // Create Account Button
                 val buttonCreateAccount = Button(ctx).apply {
                     text = "Create Account"
-                    setBackgroundColor(Color.parseColor("#4CAF50")) // Green color
-                    setTextColor(Color.WHITE)
+                    setBackgroundColor(Color.parseColor("#e45a66")) // Green color
+                    setTextColor(Color.parseColor("#FFFFFFFF"))
                     setOnClickListener {
                         val email = editTextEmail.text.toString().trim().toLowerCase()
                         val password = editTextPassword.text.toString().trim()

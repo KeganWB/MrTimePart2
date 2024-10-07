@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
-    android:background="#673AB7">
+    android:background="@color/backgroundColour">
 
     <TextView
         android:id="@+id/nameTextView"
@@ -13,6 +13,7 @@
         android:layout_marginEnd="53dp"
         android:layout_marginBottom="78dp"
         android:text="Name"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,6 +31,7 @@
         android:layout_marginEnd="62dp"
         android:layout_marginBottom="16dp"
         android:text="Start Time"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.148"
@@ -45,6 +47,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="6dp"
         android:text="End Time"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.391"
@@ -58,6 +61,7 @@
         android:layout_marginEnd="203dp"
         android:layout_marginBottom="40dp"
         android:text="Description"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.051"
@@ -72,6 +76,7 @@
         android:layout_marginEnd="217dp"
         android:layout_marginBottom="1dp"
         android:text="Category"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/descriptionTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.693"
