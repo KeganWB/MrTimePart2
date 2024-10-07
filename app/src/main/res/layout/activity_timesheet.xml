@@ -4,11 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColour"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backArrow"
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/TextColour"
+        app:srcCompat="@drawable/ic_back" />
 
     <ScrollView
         android:id="@+id/scrollTimeSheets"
@@ -19,7 +24,9 @@
             android:id="@+id/timesheetContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"/>
+            android:orientation="vertical">
+
+        </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -28,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:clickable="true"
+        app:backgroundTint="@color/TextColour"
         app:srcCompat="@android:drawable/ic_menu_add" />
 
 </LinearLayout>

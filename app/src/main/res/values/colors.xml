@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="backgroundColour">#0C1424</color>
+    <color name="toolBarAndNavColour">#3B5A73</color>
+    <color name="editTextColour">#3B5A73</color>
+    <color name="TextColour">#e45a66</color>
+
+
 </resources>

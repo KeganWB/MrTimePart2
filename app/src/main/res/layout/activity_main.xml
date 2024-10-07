@@ -1,18 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Button
-        android:id="@+id/buttonCategory"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/backgroundColour">
 
-    <Button
-        android:id="@+id/buttonTimeSheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-</LinearLayout>
+        <!-- Toolbar for the ActionBarDrawerToggle -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/toolBarAndNavColour" />
+
+        <!-- Your activity content goes here -->
+
+    </LinearLayout>
+
+    <!-- Navigation View -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_layout"
+        android:background="@color/toolBarAndNavColour"/>
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,46 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/backgroundColour">
 
     <!-- Minimum Hours Input -->
+
+    <!-- Maximum Hours Input -->
+
+    <!-- Submit Button -->
+
     <TextView
         android:id="@+id/tvMinHoursLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Minimum Hours"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/TextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.139" />
 
     <EditText
         android:id="@+id/etMinHours"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="388dp"
+        android:layout_height="59dp"
+        android:hint="Minimum Hours"
         android:inputType="number"
-        android:hint="Minimum Hours" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.185" />
 
-    <!-- Maximum Hours Input -->
+    <EditText
+        android:id="@+id/etMaxHours"
+        android:layout_width="388dp"
+        android:layout_height="66dp"
+        android:hint="Maximum Hours"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.402" />
+
     <TextView
         android:id="@+id/tvMaxHoursLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Maximum Hours"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/TextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.342" />
 
-    <EditText
-        android:id="@+id/etMaxHours"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Maximum Hours" />
-
-    <!-- Submit Button -->
     <Button
         android:id="@+id/btnSubmitHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
-</LinearLayout>
+        android:textColor="@color/white"
+        android:background="@color/TextColour"
+        app:icon="@drawable/baseline_save_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.539" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBackHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="@drawable/baseline_menu_24"
+        app:backgroundTint="@color/TextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

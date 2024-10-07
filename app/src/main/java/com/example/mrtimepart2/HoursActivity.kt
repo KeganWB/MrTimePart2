@@ -1,10 +1,12 @@
 package com.example.mrtimepart2
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class HoursActivity : AppCompatActivity() {
@@ -17,6 +19,7 @@ class HoursActivity : AppCompatActivity() {
         val minHoursEditText = findViewById<EditText>(R.id.etMinHours)
         val maxHoursEditText = findViewById<EditText>(R.id.etMaxHours)
         val submitButton = findViewById<Button>(R.id.btnSubmitHours)
+        val fabBackHours = findViewById<FloatingActionButton>(R.id.fabBackHours)
 
         // Set up a click listener for the submit button
         submitButton.setOnClickListener {
@@ -31,6 +34,9 @@ class HoursActivity : AppCompatActivity() {
                 // Show a message if the fields are empty
                 Toast.makeText(this, "Please enter both minimum and maximum hours", Toast.LENGTH_SHORT).show()
             }
+        }
+        fabBackHours.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }
