@@ -8,14 +8,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/backgroundColour">
 
         <!-- Toolbar for the ActionBarDrawerToggle -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/purple_700" />
+            android:layout_height="0dp"
+            android:background="@color/toolBarAndNavColour" />
 
         <!-- Your activity content goes here -->
 
@@ -27,5 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/drawer_layout" />
+        app:menu="@menu/drawer_layout"
+        android:background="@color/toolBarAndNavColour"/>
 </androidx.drawerlayout.widget.DrawerLayout>
