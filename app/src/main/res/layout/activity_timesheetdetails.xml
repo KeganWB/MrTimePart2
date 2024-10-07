@@ -12,7 +12,9 @@
         android:hint="TimeSheet Name"
         android:inputType="textNoSuggestions|textVisiblePassword"
         android:longClickable="false"
+        android:textColor="#FFFFFF"
         android:textColorHighlight="@color/white"
+        android:textColorHint="#FFFFFF"
         android:textIsSelectable="false" />
 
     <EditText
@@ -25,6 +27,7 @@
         android:inputType="none"
         android:longClickable="false"
         android:textColor="@color/white"
+        android:textColorHint="#FFFFFF"
         android:textIsSelectable="false" />
 
     <EditText
@@ -36,6 +39,8 @@
         android:hint="End Time"
         android:inputType="none"
         android:longClickable="false"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textIsSelectable="false" />
 
     <EditText
@@ -45,12 +50,16 @@
         android:hint="Description"
         android:inputType="textNoSuggestions|textVisiblePassword"
         android:longClickable="false"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textIsSelectable="false" />
 
     <Spinner
         android:id="@+id/spinnerCategory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="#E25965"
+        android:foregroundTint="#FFFFFF" />
 
     <!-- Button to add or take a photo -->
     <Button
