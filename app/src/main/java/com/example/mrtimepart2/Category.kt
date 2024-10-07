@@ -35,6 +35,7 @@ class Category : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
+        sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
         val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
         // Initialize views
         categoryTextInput = findViewById(R.id.category_text_input)
@@ -44,14 +45,14 @@ class Category : AppCompatActivity() {
 
         // Initialize RecyclerView
         categoryList = mutableListOf()
-        categoryAdapter = CategoryAdapter(categoryList)
+        categoryAdapter = CategoryAdapter(categoryList,sharedPreferences)
         recyclerView.adapter = categoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initially hide the input field AND the submit button
         categoryTextInput.visibility = View.GONE
         submitButton.visibility = View.GONE
-        sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
+
 
         retrieveCategory()
         fabBack.setOnClickListener{

@@ -1,6 +1,7 @@
 package com.example.mrtimepart2.ui.theme
 
 import android.app.AlertDialog
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,9 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mrtimepart2.R
+import com.google.gson.Gson
 
-class CategoryAdapter(private val categoryList: MutableList<String>) :
+class CategoryAdapter(private val categoryList: MutableList<String>, private val sharedPreferences: SharedPreferences) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -18,7 +20,7 @@ class CategoryAdapter(private val categoryList: MutableList<String>) :
         val editButton: Button = itemView.findViewById(R.id.editButton)
         val deleteButton: Button = itemView.findViewById(R.id.deleteBtn)
     }
-
+private val gson = Gson()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.category_item, parent, false)
@@ -42,6 +44,7 @@ class CategoryAdapter(private val categoryList: MutableList<String>) :
                     categoryList.removeAt(position)
                     notifyItemRemoved(position)
                     dialog.dismiss()
+                    updateSharedPreferences()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
@@ -62,6 +65,7 @@ class CategoryAdapter(private val categoryList: MutableList<String>) :
                     if (newName.isNotBlank()) {
                         categoryList[position] = newName
                         notifyItemChanged(position)
+                        updateSharedPreferences()
                     } else {
                         // Handle empty name (e.g., show a Toast message)
                     }
@@ -77,5 +81,12 @@ class CategoryAdapter(private val categoryList: MutableList<String>) :
 
     override fun getItemCount(): Int {
         return categoryList.size
+    }
+    private fun updateSharedPreferences() {
+        val jsonString = gson.toJson(categoryList)
+        with(sharedPreferences.edit()) {
+            putString("CATEGORY_LIST", jsonString)
+            apply()
+        }
     }
 }
