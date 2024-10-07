@@ -7,9 +7,11 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,6 +24,7 @@ class TimeSheetActivity: AppCompatActivity() {
     private val timesheetList = mutableListOf<TimeSheetData>() // List to hold timesheet data
     private lateinit var sharedPreferences: SharedPreferences
     private val gson = Gson()
+    private lateinit var sortSpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,12 @@ class TimeSheetActivity: AppCompatActivity() {
         timesheetContainer = findViewById(R.id.timesheetContainer)
         sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
 
+        // Sort Spinner fetching from categories
+        sortSpinner = findViewById<Spinner>(R.id.spinnerSort)
+        val categoriesFetch = retrieveCategories()
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoriesFetch)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sortSpinner.adapter = adapter
         retrieveTimesheets()
 
 
@@ -103,6 +112,18 @@ class TimeSheetActivity: AppCompatActivity() {
             savedTimesheets.forEach { timesheet ->
                 addTimesheetToView(timesheet)
             }
+        }
+    }
+
+    private fun retrieveCategories(): List<String> {
+        val categoryRet = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
+        val sortG = Gson()
+        val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
+        return if (!jsonString.isNullOrEmpty()) {
+            val type = object : TypeToken<MutableList<String>>() {}.type
+            sortG.fromJson(jsonString, type)
+        } else {
+            listOf("None") // Default categories if none are saved
         }
     }
 }
