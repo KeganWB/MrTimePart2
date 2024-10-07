@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -18,8 +17,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
 
@@ -48,6 +48,17 @@ class AddTimeSheetActivity : DialogFragment() {
 
 
 
+
+
+
+
+        val categories = retrieveCategories()
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCategory.adapter = adapter
+
+
+
         // Keyboard pop up
         editTextName.setOnClickListener(){
                 // Get the InputMethodManager from the context
@@ -66,13 +77,7 @@ class AddTimeSheetActivity : DialogFragment() {
         }
 
         //Add Spinner Default Categories
-        val categories = listOf("Other","Kegan")
-        // Create an ArrayAdapter using the default spinner layout
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner
-        spinnerCategory.adapter = adapter
+
 
         // Set up button to take or select a photo
         buttonAddPhoto.setOnClickListener {
@@ -193,5 +198,16 @@ class AddTimeSheetActivity : DialogFragment() {
         }, hour, minute, true) // true for 24-hour format
 
         timePickerDialog.show()
+    }
+    private fun retrieveCategories(): List<String> {
+        val sharedPreferences = requireContext().getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
+        return if (!jsonString.isNullOrEmpty()) {
+            val type = object : TypeToken<MutableList<String>>() {}.type
+            gson.fromJson(jsonString, type)
+        } else {
+            listOf("Other") // Default categories if none are saved
+        }
     }
 }
