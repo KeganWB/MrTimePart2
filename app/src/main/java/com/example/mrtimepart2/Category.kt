@@ -37,19 +37,16 @@ class Category : AppCompatActivity() {
         setContentView(R.layout.activity_category)
         sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
         val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
-        // Initialize views
         categoryTextInput = findViewById(R.id.category_text_input)
         addButton = findViewById(R.id.add_category_btn)
         recyclerView = findViewById(R.id.recyclerView)
         submitButton = findViewById(R.id.categorySubmitBtn)
-
-        // Initialize RecyclerView
         categoryList = mutableListOf()
         categoryAdapter = CategoryAdapter(categoryList,sharedPreferences)
         recyclerView.adapter = categoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Initially hide the input field AND the submit button
+        //hide the input field AND the submit button
         categoryTextInput.visibility = View.GONE
         submitButton.visibility = View.GONE
 
@@ -62,11 +59,11 @@ class Category : AppCompatActivity() {
         addButton.setOnClickListener {
             Log.d("clicked", "FAB pressed")
 
-            // Show the input field AND the submit button
+            //Show the input field and the submit button
             categoryTextInput.visibility = View.VISIBLE
             submitButton.visibility = View.VISIBLE
 
-            // Hide the Edit and Delete buttons in the RecyclerView
+            //Hide the Edit and Delete buttons
             categoryAdapter.showEditDeleteButtons = false
             categoryAdapter.notifyDataSetChanged()
 
@@ -75,7 +72,6 @@ class Category : AppCompatActivity() {
             imm.showSoftInput(categoryTextInput, InputMethodManager.SHOW_IMPLICIT)
         }
 
-        // Listener for the Submit button
         submitButton.setOnClickListener {
             val categoryName = categoryTextInput.text.toString()
             categoryList.add(categoryName)
@@ -83,11 +79,11 @@ class Category : AppCompatActivity() {
             categoryAdapter.notifyItemInserted(categoryList.size - 1)
             categoryTextInput.text?.clear()
 
-            // Hide the input field AND the submit button
+            //Hide the input field and the submit button
             categoryTextInput.visibility = View.GONE
             submitButton.visibility = View.GONE
 
-            // Show the Edit and Delete buttons again
+            //Show the Edit and Delete buttons again
             categoryAdapter.showEditDeleteButtons = true
             categoryAdapter.notifyDataSetChanged()
 
@@ -95,7 +91,7 @@ class Category : AppCompatActivity() {
             imm.hideSoftInputFromWindow(categoryTextInput.windowToken, 0)
         }
 
-        // Listener for the "Done" action on the keyboard
+
         categoryTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val categoryName = categoryTextInput.text.toString()
@@ -103,13 +99,11 @@ class Category : AppCompatActivity() {
                 categoryAdapter.notifyItemInserted(categoryList.size - 1)
                 categoryTextInput.text?.clear()
 
-                // Hide the input field and hide the keyboard
                 categoryTextInput.visibility = View.GONE
                 submitButton.visibility = View.GONE
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(categoryTextInput.windowToken, 0)
 
-                // Show the Edit and Delete buttons again
                 categoryAdapter.showEditDeleteButtons = true
                 categoryAdapter.notifyDataSetChanged()
 
@@ -119,23 +113,22 @@ class Category : AppCompatActivity() {
             }
         }
     }
-    // saves to gson
+    //saving method to Gson
     private fun saveCategory() {
-        val jsonString = gson.toJson(categoryList) // Serialize categoryList
+        val jsonString = gson.toJson(categoryList)
         with(sharedPreferences.edit()) {
-            putString("CATEGORY_LIST", jsonString) // Save to SharedPreferences
+            putString("CATEGORY_LIST", jsonString)
             apply()
         }
     }
 
-    // Retrieves the category list from SharedPreferences
     private fun retrieveCategory() {
         val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
         if (!jsonString.isNullOrEmpty()) {
             val type = object : TypeToken<MutableList<String>>() {}.type
             val savedCategoryList: MutableList<String> = gson.fromJson(jsonString, type)
             categoryList.addAll(savedCategoryList)
-            categoryAdapter.notifyDataSetChanged() // Update the adapter
+            categoryAdapter.notifyDataSetChanged()
         }
     }
 }

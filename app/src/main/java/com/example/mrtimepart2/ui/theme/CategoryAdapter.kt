@@ -32,7 +32,7 @@ private val gson = Gson()
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.categoryTextView.text = categoryList[position]
 
-        // Set the visibility of the Edit and Delete buttons
+
         holder.editButton.visibility = if (showEditDeleteButtons) View.VISIBLE else View.GONE
         holder.deleteButton.visibility = if (showEditDeleteButtons) View.VISIBLE else View.GONE
 
@@ -67,7 +67,6 @@ private val gson = Gson()
                         notifyItemChanged(position)
                         updateSharedPreferences()
                     } else {
-                        // Handle empty name (e.g., show a Toast message)
                     }
                     dialog.dismiss()
                 }

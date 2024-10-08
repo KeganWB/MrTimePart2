@@ -1,7 +1,9 @@
 package com.example.mrtimepart2
 
+import TimeSheetData
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -21,7 +23,9 @@ import androidx.fragment.app.DialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class AddTimeSheetActivity : DialogFragment() {
 
@@ -29,27 +33,23 @@ class AddTimeSheetActivity : DialogFragment() {
         private const val REQUEST_CAMERA = 100
         private const val REQUEST_GALLERY = 101
     }
+
     private lateinit var imagePreview: ImageView
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater
         val builder = AlertDialog.Builder(requireContext())
         val dialogView = inflater.inflate(R.layout.activity_timesheetdetails, null)
-
-        // Find your views
         val editTextName = dialogView.findViewById<EditText>(R.id.editTextName)
         val editTextStartTime = dialogView.findViewById<EditText>(R.id.editTextStartTime)
         val editTextEndTime = dialogView.findViewById<EditText>(R.id.editTextEndTime)
+        val editTextStartDate = dialogView.findViewById<EditText>(R.id.editTextStartDate) // New
+        val editTextEndDate = dialogView.findViewById<EditText>(R.id.editTextEndDate) // New
         val editTextDescription = dialogView.findViewById<EditText>(R.id.editTextDescription)
         val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
         val buttonAddPhoto = dialogView.findViewById<Button>(R.id.buttonAddPhoto)
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
         imagePreview = dialogView.findViewById(R.id.imagePrev)
-
-
-
-
-
-
 
 
         val categories = retrieveCategories()
@@ -58,33 +58,28 @@ class AddTimeSheetActivity : DialogFragment() {
         spinnerCategory.adapter = adapter
 
 
-
-        // Keyboard pop up
-        editTextName.setOnClickListener(){
-                // Get the InputMethodManager from the context
-            editTextName.requestFocus()
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editTextName, InputMethodManager.SHOW_IMPLICIT)
-                // Hide the soft keyboard
-                //imm.hideSoftInputFromWindow(v.windowToken, 0)
-
+        editTextStartDate.setOnClickListener {
+            showDatePickerDialog(editTextStartDate)
         }
+
+        editTextEndDate.setOnClickListener {
+            showDatePickerDialog(editTextEndDate)
+        }
+
+
         editTextStartTime.setOnClickListener {
             showTimePickerDialog(editTextStartTime)
         }
+
         editTextEndTime.setOnClickListener {
             showTimePickerDialog(editTextEndTime)
         }
 
-        //Add Spinner Default Categories
 
-
-        // Set up button to take or select a photo
         buttonAddPhoto.setOnClickListener {
             val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Select Option")
-
             builder.setItems(options) { dialog, which ->
                 when (options[which]) {
                     "Take Photo" -> {
@@ -99,83 +94,94 @@ class AddTimeSheetActivity : DialogFragment() {
                         val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                         startActivityForResult(pickPhotoIntent, REQUEST_GALLERY)
                     }
-                    "Cancel" -> {
-                        dialog.dismiss()
-                    }
+                    "Cancel" -> dialog.dismiss()
                 }
             }
             builder.show()
         }
 
-        // Add custom listener for submit button
         buttonSubmit.setOnClickListener {
-            // Collect the entered information
             val name = editTextName.text.toString()
             val startTime = editTextStartTime.text.toString()
             val endTime = editTextEndTime.text.toString()
+            val startDate = editTextStartDate.text.toString()
+            val endDate = editTextEndDate.text.toString()
             val description = editTextDescription.text.toString()
             val category = spinnerCategory.selectedItem.toString()
 
-            // Convert the image to ByteArray (if available)
             val imageByteArray = (imagePreview.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 stream.toByteArray()
             }
 
-            // Create a TimeSheetData object
             val timeSheetData = TimeSheetData(
                 name = name,
                 startTime = startTime,
                 endTime = endTime,
+                startDate = startDate,
+                endDate = endDate,
                 description = description,
                 category = category,
-                image = imageByteArray // Add the image ByteArray if available
+                image = imageByteArray
             )
 
-            // Notify the listener about the new timesheet data
+            // Notify listener about the new timesheet data
             listener?.onTimesheetAdded(timeSheetData)
-
-            // Dismiss the dialog after submitting
             dismiss()
         }
 
-        // Remove the default positive button and keep only the Cancel button
+
         builder.setView(dialogView)
             .setTitle("Add New Timesheet")
             .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss() // This will close the dialog without doing anything
+                dialog.dismiss()
             }
 
         return builder.create()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun showDatePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_CAMERA -> {
-                    val imageBitmap = data?.extras?.get("data") as? Bitmap
-                    imageBitmap?.let {
-                        // Display the captured image in the ImageView
-                        imagePreview.setImageBitmap(it)
-                        imagePreview.visibility = ImageView.VISIBLE
-                        Toast.makeText(requireContext(), "Photo captured", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                REQUEST_GALLERY -> {
-                    val selectedImageUri = data?.data
-                    selectedImageUri?.let {
-                        // Load and display the selected image in the ImageView
-                        imagePreview.setImageURI(it)
-                        imagePreview.visibility = ImageView.VISIBLE
-                        Toast.makeText(requireContext(), "Photo selected", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val selectedDate = Calendar.getInstance()
+            selectedDate.set(selectedYear, selectedMonth, selectedDay)
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+            editText.setText(dateFormat.format(selectedDate.time))
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
+
+    private fun showTimePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
+            val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+            editText.setText(formattedTime)
+        }, hour, minute, true)
+
+        timePickerDialog.show()
+    }
+
+    private fun retrieveCategories(): List<String> {
+        val sharedPreferences = requireContext().getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
+        return if (!jsonString.isNullOrEmpty()) {
+            val type = object : TypeToken<MutableList<String>>() {}.type
+            gson.fromJson(jsonString, type)
+        } else {
+            listOf("Other") //this is default Category
         }
     }
+
     interface OnTimesheetAddedListener {
         fun onTimesheetAdded(timeSheetData: TimeSheetData)
     }
@@ -186,28 +192,27 @@ class AddTimeSheetActivity : DialogFragment() {
         this.listener = listener
     }
 
-    private fun showTimePickerDialog(editText: EditText) {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
-            // Format the selected time and display it in the EditText
-            val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
-            editText.setText(formattedTime)
-        }, hour, minute, true) // true for 24-hour format
-
-        timePickerDialog.show()
-    }
-    private fun retrieveCategories(): List<String> {
-        val sharedPreferences = requireContext().getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
-        val gson = Gson()
-        val jsonString = sharedPreferences.getString("CATEGORY_LIST", null)
-        return if (!jsonString.isNullOrEmpty()) {
-            val type = object : TypeToken<MutableList<String>>() {}.type
-            gson.fromJson(jsonString, type)
-        } else {
-            listOf("Other") // Default categories if none are saved
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CAMERA -> {
+                    val imageBitmap = data?.extras?.get("data") as? Bitmap
+                    imageBitmap?.let {
+                        imagePreview.setImageBitmap(it)
+                        imagePreview.visibility = ImageView.VISIBLE
+                        Toast.makeText(requireContext(), "Photo captured", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                REQUEST_GALLERY -> {
+                    val selectedImageUri = data?.data
+                    selectedImageUri?.let {
+                        imagePreview.setImageURI(it)
+                        imagePreview.visibility = ImageView.VISIBLE
+                        Toast.makeText(requireContext(), "Photo selected", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 }

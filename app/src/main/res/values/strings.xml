@@ -7,4 +7,9 @@
     <string name="title_activity_create_account">Create Account</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string-array name="sort_options">
+        <item>All</item>
+        <item>Category</item>
+        <item>Filter by Date</item>
+    </string-array>
 </resources>

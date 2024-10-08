@@ -27,7 +27,7 @@ class CreateAccountActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MaterialTheme { // Use Material 3 theme
+            MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -50,7 +50,6 @@ class CreateAccountActivity : ComponentActivity() {
                     setPadding(40, 0, 40, 0)
                 }
 
-                // Create Account Text
                 val createAccountText = TextView(ctx).apply {
                     text = "Create Account"
                     setTextColor(Color.parseColor("#e45a66"))
@@ -64,7 +63,6 @@ class CreateAccountActivity : ComponentActivity() {
                     weight = 1f
                 })
 
-                // Email Input Field
                 val editTextEmail = EditText(ctx).apply {
                     hint = "Email"
                     setHintTextColor(Color.GRAY)
@@ -78,7 +76,6 @@ class CreateAccountActivity : ComponentActivity() {
                     weight = 1f
                 })
 
-                // Password Input Field
                 val editTextPassword = EditText(ctx).apply {
                     hint = "Password"
                     setHintTextColor(Color.GRAY)
@@ -94,7 +91,6 @@ class CreateAccountActivity : ComponentActivity() {
                     weight = 1f
                 })
 
-                // Confirm Password Input Field
                 val editTextConfirmPassword = EditText(ctx).apply {
                     hint = "Confirm Password"
                     setHintTextColor(Color.GRAY)
@@ -110,7 +106,6 @@ class CreateAccountActivity : ComponentActivity() {
                     weight = 1f
                 })
 
-                // Create Account Button
                 val buttonCreateAccount = Button(ctx).apply {
                     text = "Create Account"
                     setBackgroundColor(Color.parseColor("#e45a66")) // Green color
@@ -128,7 +123,7 @@ class CreateAccountActivity : ComponentActivity() {
                             editor.putString("password", password)
                             editor.apply()
 
-                            Log.d("CreateAccountActivity", "Email: $email, Password: $password") // Log for debugging
+                            Log.d("CreateAccountActivity", "Email: $email, Password: $password")
 
                             Toast.makeText(ctx, "Account created successfully", Toast.LENGTH_SHORT)
                                 .show()
@@ -150,7 +145,6 @@ class CreateAccountActivity : ComponentActivity() {
                 mainLayout
             },
             update = { view ->
-                // Update the view if needed (not required in this case)
             }
         )
     }

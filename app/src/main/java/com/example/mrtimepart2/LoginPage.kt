@@ -28,7 +28,6 @@ class LoginPage : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Pre-existing admin account (only create if no accounts exist)
         val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         if (sharedPref.all.isEmpty()) {
             val editor = sharedPref.edit()
@@ -64,16 +63,16 @@ fun LoginPageLayout(context: Context) {
 
             // Logo
             val logo = ImageView(ctx).apply {
-                // ... set image source (e.g.,setImageResource(R.drawable.your_logo)) ...
+                //set Logo here
+                setImageResource(R.drawable.mr_time)
             }
             mainLayout.addView(logo, LinearLayout.LayoutParams(
-                200, 200
+                600, 600
             ).apply {
                 topMargin = 50
                 weight = 2f
             })
 
-            // Sign In Text
             val signInText = TextView(ctx).apply {
                 text = "Sign In"
                 setTextColor(Color.parseColor("#e45a66"))
@@ -87,7 +86,6 @@ fun LoginPageLayout(context: Context) {
                 weight = 1f
             })
 
-            // Welcome Text
             val welcomeText = TextView(ctx).apply {
                 text = "Hi there! Nice to see you again"
                 setTextColor(Color.parseColor("#e45a66"))
@@ -100,7 +98,6 @@ fun LoginPageLayout(context: Context) {
                 weight = 1f
             })
 
-            // Email Input Field
             val editTextEmail = EditText(ctx).apply {
                 hint = "Email"
                 setHintTextColor(Color.GRAY)
@@ -114,7 +111,6 @@ fun LoginPageLayout(context: Context) {
                 weight = 1f
             })
 
-            // Password Input Field
             val editTextPassword = EditText(ctx).apply {
                 hint = "Password"
                 setHintTextColor(Color.GRAY)
@@ -130,7 +126,6 @@ fun LoginPageLayout(context: Context) {
                 weight = 1f
             })
 
-            // Sign In Button
             val buttonSignIn = Button(ctx).apply {
                 text = "Sign In"
                 setBackgroundColor(Color.parseColor("#e45a66"))
@@ -162,7 +157,6 @@ fun LoginPageLayout(context: Context) {
                 weight = 1f
             })
 
-            // Create Account Button
             val buttonCreateAccount = Button(ctx).apply {
                 text = "Create Account"
                 setBackgroundColor(Color.parseColor("#e45a66"))
@@ -182,7 +176,7 @@ fun LoginPageLayout(context: Context) {
             mainLayout
         },
         update = { view ->
-            // Update the view if needed
+
         }
     )
 }
