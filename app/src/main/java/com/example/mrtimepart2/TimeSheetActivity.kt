@@ -90,6 +90,8 @@ class TimeSheetActivity : AppCompatActivity() {
         val nameTextView = timesheetView.findViewById<TextView>(R.id.nameTextView)
         val startTimeTextView = timesheetView.findViewById<TextView>(R.id.startTimeTextView)
         val endTimeTextView = timesheetView.findViewById<TextView>(R.id.endTimeTextView)
+        val startDateTextView = timesheetView.findViewById<TextView>(R.id.startDateTextView) // New field
+        val endDateTextView = timesheetView.findViewById<TextView>(R.id.endDateTextView)
         val descriptionTextView = timesheetView.findViewById<TextView>(R.id.descriptionTextView)
         val categoryTextView = timesheetView.findViewById<TextView>(R.id.categoryTextView)
         val imageView = timesheetView.findViewById<ImageView>(R.id.imageView)
@@ -98,6 +100,8 @@ class TimeSheetActivity : AppCompatActivity() {
         nameTextView.text = timeSheetData.name
         startTimeTextView.text = timeSheetData.startTime
         endTimeTextView.text = timeSheetData.endTime
+        startDateTextView.text = timeSheetData.startDate // Display the start date
+        endDateTextView.text = timeSheetData.endDate
         descriptionTextView.text = timeSheetData.description
         categoryTextView.text = timeSheetData.category
 
@@ -161,6 +165,7 @@ class TimeSheetActivity : AppCompatActivity() {
             // Sort timesheetList by the selected category
             timesheetList.filter { it.category == category }
         }
+        val dateSortedList = sortedList.sortedBy { it.startDate }
 
         // Re-add sorted timesheets to the view
         sortedList.forEach { timesheet ->

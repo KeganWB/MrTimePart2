@@ -44,6 +44,35 @@
         android:textIsSelectable="false" />
 
     <EditText
+        android:id="@+id/editTextStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="Start Date"
+        android:inputType="none"
+        android:longClickable="false"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textIsSelectable="false" />
+
+    <!-- End Date field -->
+    <EditText
+        android:id="@+id/editTextEndDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="End Date"
+        android:inputType="none"
+        android:longClickable="false"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textIsSelectable="false" />
+
+
+
+    <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

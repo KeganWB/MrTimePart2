@@ -7,6 +7,8 @@ data class TimeSheetData(
     val name: String,
     val startTime: String,
     val endTime: String,
+    val startDate: String,     // New field
+    val endDate: String,       // New field
     val description: String,
     val category: String,
     val image: ByteArray? = null // Optional for the image
@@ -15,6 +17,8 @@ data class TimeSheetData(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readString() ?: "", // Reading startDate
+        parcel.readString() ?: "", // Reading endDate
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.createByteArray() // Read image as ByteArray
@@ -24,6 +28,8 @@ data class TimeSheetData(
         parcel.writeString(name)
         parcel.writeString(startTime)
         parcel.writeString(endTime)
+        parcel.writeString(startDate)  // Writing startDate
+        parcel.writeString(endDate)    // Writing endDate
         parcel.writeString(description)
         parcel.writeString(category)
         parcel.writeByteArray(image)
