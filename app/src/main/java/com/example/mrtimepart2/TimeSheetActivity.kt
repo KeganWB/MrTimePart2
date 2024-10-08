@@ -51,10 +51,10 @@ class TimeSheetActivity : AppCompatActivity() {
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedCategory = parent?.getItemAtPosition(position) as String
-                if (selectedCategory == "Sort By Date") {
-                    showDateInputDialog() // Call method to show date input dialog
-                } else {
-                    sortTimesheets(selectedCategory) // Sort by category as before
+                when {
+                    selectedCategory == "Sort By Date" -> showDateInputDialog() // Show date input dialog
+                    selectedCategory == "Sort By Category and Date" -> showCategoryAndDateInputDialog() // Show category and date input dialog
+                    else -> sortTimesheets(selectedCategory) // Sort by category as before
                 }
             }
 
@@ -157,6 +157,7 @@ class TimeSheetActivity : AppCompatActivity() {
         // Add options to the list, including the new "Sort By Date" option
         categories.add(0, "All") // Ensure "All" is the first option
         categories.add("Sort By Date") // Add the "Sort By Date" option
+        categories.add("Sort By Category and Date") // Add the new option
         return categories
     }
 
@@ -209,6 +210,43 @@ class TimeSheetActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun showCategoryAndDateInputDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_category_date_input, null)
+        val startDateInput = dialogView.findViewById<TextView>(R.id.tvStartDate)
+        val endDateInput = dialogView.findViewById<TextView>(R.id.tvEndDate)
+        val categoryInput = dialogView.findViewById<Spinner>(R.id.spinnerCategory)
+
+        // Set up category spinner
+        val categoriesFetch = retrieveCategories().filter { it != "Sort By Date" && it != "Sort By Category and Date" }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoriesFetch)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categoryInput.adapter = adapter
+
+        startDateInput.setOnClickListener {
+            openDatePicker { date ->
+                startDateInput.text = date
+            }
+        }
+
+        endDateInput.setOnClickListener {
+            openDatePicker { date ->
+                endDateInput.text = date
+            }
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Select Category and Date Range")
+            .setView(dialogView)
+            .setPositiveButton("Filter") { dialog, which ->
+                val selectedCategory = categoryInput.selectedItem.toString()
+                val startDate = startDateInput.text.toString()
+                val endDate = endDateInput.text.toString()
+                filterTimesheetsByCategoryAndDate(selectedCategory, startDate, endDate)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     private fun openDatePicker(onDateSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -233,6 +271,26 @@ class TimeSheetActivity : AppCompatActivity() {
         val filteredList = timesheetList.filter { timesheet ->
             val timesheetStartDate = dateFormat.parse(timesheet.startDate)
             timesheetStartDate?.let { it in start..end } ?: false
+        }
+
+        // Re-add filtered timesheets to the view
+        filteredList.forEach { timesheet ->
+            addTimesheetToView(timesheet)
+        }
+    }
+
+    private fun filterTimesheetsByCategoryAndDate(selectedCategory: String, startDate: String, endDate: String) {
+        // Clear current views from the container
+        timesheetContainer.removeAllViews()
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val start = dateFormat.parse(startDate) ?: Date(Long.MIN_VALUE)
+        val end = dateFormat.parse(endDate) ?: Date(Long.MAX_VALUE)
+
+        // Filter timesheets based on the selected category and date range
+        val filteredList = timesheetList.filter { timesheet ->
+            val timesheetStartDate = dateFormat.parse(timesheet.startDate)
+            timesheet.category == selectedCategory && timesheetStartDate?.let { it in start..end } ?: false
         }
 
         // Re-add filtered timesheets to the view
