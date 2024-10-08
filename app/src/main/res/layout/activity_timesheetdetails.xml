@@ -56,7 +56,6 @@
         android:textColorHint="#FFFFFF"
         android:textIsSelectable="false" />
 
-    <!-- End Date field -->
     <EditText
         android:id="@+id/editTextEndDate"
         android:layout_width="match_parent"
@@ -90,7 +89,6 @@
         android:background="#E25965"
         android:foregroundTint="#FFFFFF" />
 
-    <!-- Button to add or take a photo -->
     <Button
         android:id="@+id/buttonAddPhoto"
         android:layout_width="match_parent"

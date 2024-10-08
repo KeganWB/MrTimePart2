@@ -1,5 +1,6 @@
 package com.example.mrtimepart2
 
+import TimeSheetData
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -39,8 +40,6 @@ class AddTimeSheetActivity : DialogFragment() {
         val inflater = requireActivity().layoutInflater
         val builder = AlertDialog.Builder(requireContext())
         val dialogView = inflater.inflate(R.layout.activity_timesheetdetails, null)
-
-        // Find your views
         val editTextName = dialogView.findViewById<EditText>(R.id.editTextName)
         val editTextStartTime = dialogView.findViewById<EditText>(R.id.editTextStartTime)
         val editTextEndTime = dialogView.findViewById<EditText>(R.id.editTextEndTime)
@@ -52,13 +51,13 @@ class AddTimeSheetActivity : DialogFragment() {
         val buttonSubmit = dialogView.findViewById<Button>(R.id.buttonSubmit)
         imagePreview = dialogView.findViewById(R.id.imagePrev)
 
-        // Set up spinner with categories
+
         val categories = retrieveCategories()
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = adapter
 
-        // Date pickers for Start Date and End Date
+
         editTextStartDate.setOnClickListener {
             showDatePickerDialog(editTextStartDate)
         }
@@ -67,7 +66,7 @@ class AddTimeSheetActivity : DialogFragment() {
             showDatePickerDialog(editTextEndDate)
         }
 
-        // Time pickers for Start Time and End Time
+
         editTextStartTime.setOnClickListener {
             showTimePickerDialog(editTextStartTime)
         }
@@ -76,7 +75,7 @@ class AddTimeSheetActivity : DialogFragment() {
             showTimePickerDialog(editTextEndTime)
         }
 
-        // Set up button to take or select a photo
+
         buttonAddPhoto.setOnClickListener {
             val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
             val builder = AlertDialog.Builder(requireContext())
@@ -101,13 +100,12 @@ class AddTimeSheetActivity : DialogFragment() {
             builder.show()
         }
 
-        // Add custom listener for submit button
         buttonSubmit.setOnClickListener {
             val name = editTextName.text.toString()
             val startTime = editTextStartTime.text.toString()
             val endTime = editTextEndTime.text.toString()
-            val startDate = editTextStartDate.text.toString() // New
-            val endDate = editTextEndDate.text.toString()     // New
+            val startDate = editTextStartDate.text.toString()
+            val endDate = editTextEndDate.text.toString()
             val description = editTextDescription.text.toString()
             val category = spinnerCategory.selectedItem.toString()
 
@@ -117,13 +115,12 @@ class AddTimeSheetActivity : DialogFragment() {
                 stream.toByteArray()
             }
 
-            // Create a TimeSheetData object
             val timeSheetData = TimeSheetData(
                 name = name,
                 startTime = startTime,
                 endTime = endTime,
-                startDate = startDate, // Include startDate
-                endDate = endDate,     // Include endDate
+                startDate = startDate,
+                endDate = endDate,
                 description = description,
                 category = category,
                 image = imageByteArray
@@ -134,7 +131,7 @@ class AddTimeSheetActivity : DialogFragment() {
             dismiss()
         }
 
-        // Remove the default positive button and keep only the Cancel button
+
         builder.setView(dialogView)
             .setTitle("Add New Timesheet")
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -168,7 +165,7 @@ class AddTimeSheetActivity : DialogFragment() {
         val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
             val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
             editText.setText(formattedTime)
-        }, hour, minute, true) // 24-hour format
+        }, hour, minute, true)
 
         timePickerDialog.show()
     }
@@ -181,7 +178,7 @@ class AddTimeSheetActivity : DialogFragment() {
             val type = object : TypeToken<MutableList<String>>() {}.type
             gson.fromJson(jsonString, type)
         } else {
-            listOf("Other") // Default category
+            listOf("Other") //this is default Category
         }
     }
 

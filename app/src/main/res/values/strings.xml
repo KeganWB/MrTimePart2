@@ -10,6 +10,6 @@
     <string-array name="sort_options">
         <item>All</item>
         <item>Category</item>
-        <item>Filter by Date</item> <!-- Add this option -->
+        <item>Filter by Date</item>
     </string-array>
 </resources>
