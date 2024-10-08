@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColour"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvStartDate"
+        android:layout_width="372dp"
+        android:layout_height="51dp"
+        android:background="@color/TextColour"
+        android:text="Select Start Date"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="372dp"
+        android:layout_height="66dp"
+        android:background="@color/TextColour"
+        android:text="Select End Date"
+        android:textColor="#FFFFFF" />
+</LinearLayout>
