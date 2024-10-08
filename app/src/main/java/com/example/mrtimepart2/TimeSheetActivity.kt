@@ -236,7 +236,20 @@ class TimeSheetActivity : AppCompatActivity() {
         timesheetContainer.removeAllViews()
         totalHoursTextView.visibility = View.VISIBLE
 
-        val filteredList = timesheetList.filter { it.startDate >= startDate && it.endDate <= endDate }
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val filteredList = timesheetList.filter {
+            try {
+                val timesheetStartDate = dateFormat.parse(it.startDate)
+                val timesheetEndDate = dateFormat.parse(it.endDate)
+                val startDateObj = dateFormat.parse(startDate)
+                val endDateObj = dateFormat.parse(endDate)
+
+                timesheetStartDate != null && timesheetEndDate != null &&
+                        !timesheetStartDate.before(startDateObj) && !timesheetEndDate.after(endDateObj)
+            } catch (e: Exception) {
+                false
+            }
+        }
         val totalHours = calculateTotalHours(filteredList)
 
         totalHoursTextView.text = "Total Hours: $totalHours"
@@ -248,8 +261,19 @@ class TimeSheetActivity : AppCompatActivity() {
         timesheetContainer.removeAllViews()
         totalHoursTextView.visibility = View.VISIBLE
 
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val filteredList = timesheetList.filter {
-            it.category == category && it.startDate >= startDate && it.endDate <= endDate
+            try {
+                val timesheetStartDate = dateFormat.parse(it.startDate)
+                val timesheetEndDate = dateFormat.parse(it.endDate)
+                val startDateObj = dateFormat.parse(startDate)
+                val endDateObj = dateFormat.parse(endDate)
+
+                timesheetStartDate != null && timesheetEndDate != null &&
+                        !timesheetStartDate.before(startDateObj) && !timesheetEndDate.after(endDateObj)
+            } catch (e: Exception) {
+                false
+            }
         }
         val totalHours = calculateTotalHours(filteredList)
 
@@ -260,7 +284,7 @@ class TimeSheetActivity : AppCompatActivity() {
     }
 
     private fun isValidDateRange(startDate: String, endDate: String): Boolean {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return try {
             val start = dateFormat.parse(startDate)
             val end = dateFormat.parse(endDate)
@@ -275,7 +299,10 @@ class TimeSheetActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                val selectedDate = "$year-${month + 1}-$dayOfMonth"
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                val selectedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(calendar.time)
                 onDateSelected(selectedDate)
             },
             calendar.get(Calendar.YEAR),

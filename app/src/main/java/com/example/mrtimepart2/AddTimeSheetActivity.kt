@@ -150,7 +150,7 @@ class AddTimeSheetActivity : DialogFragment() {
         val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
             editText.setText(dateFormat.format(selectedDate.time))
         }, year, month, day)
 
