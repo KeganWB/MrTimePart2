@@ -64,9 +64,10 @@ fun LoginPageLayout(context: Context) {
             // Logo
             val logo = ImageView(ctx).apply {
                 //set Logo here
+                setImageResource(R.drawable.mr_time)
             }
             mainLayout.addView(logo, LinearLayout.LayoutParams(
-                200, 200
+                600, 600
             ).apply {
                 topMargin = 50
                 weight = 2f
