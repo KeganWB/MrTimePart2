@@ -19,6 +19,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
@@ -31,10 +33,16 @@ class TimeSheetActivity : AppCompatActivity() {
     private val gson = Gson()
     private lateinit var sortSpinner: Spinner
     private lateinit var totalHoursTextView: TextView
+    private lateinit var firestore: FirebaseFirestore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timesheet)
+
+        val userId = intent.getStringExtra("USER_ID") ?: return
+
+        firestore = FirebaseFirestore.getInstance()  // Initialize Firestore
 
         timesheetContainer = findViewById(R.id.timesheetContainer)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
@@ -43,13 +51,11 @@ class TimeSheetActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("TimesheetPrefs", Context.MODE_PRIVATE)
 
-
         sortSpinner = findViewById(R.id.spinnerSort)
         val categoriesFetch = retrieveCategories()
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoriesFetch)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sortSpinner.adapter = adapter
-
 
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -61,12 +67,10 @@ class TimeSheetActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        retrieveTimesheets()
+        retrieveTimesheetsFromFirestore()
 
         fabBack.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -79,7 +83,7 @@ class TimeSheetActivity : AppCompatActivity() {
                     if (!timesheetList.contains(timeSheetData)) {
                         timesheetList.add(timeSheetData)
                         addTimesheetToView(timeSheetData)
-                        saveTimesheets()
+                        saveTimesheetsToFirestore(userId)
                     }
                 }
             })
@@ -322,5 +326,38 @@ class TimeSheetActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton("OK", null)
             .show()
+    }
+
+    private fun saveTimesheetsToFirestore(userId: String) {
+        val userTimesheetsCollection = firestore.collection("users").document(userId).collection("timesheets")
+
+        // Clear existing data for this user if needed
+        userTimesheetsCollection.get().addOnSuccessListener { snapshot ->
+            for (doc in snapshot.documents) {
+                doc.reference.delete()
+            }
+
+            timesheetList.forEach { timeSheetData ->
+                userTimesheetsCollection.add(timeSheetData)
+            }
+        }.addOnFailureListener { e ->
+            showError("Failed to save timesheets: ${e.message}")
+        }
+    }
+
+    private fun retrieveTimesheetsFromFirestore() {
+        firestore.collection("timesheets")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                timesheetList.clear()
+                for (document in snapshot) {
+                    val timesheet = document.toObject<TimeSheetData>()
+                    timesheetList.add(timesheet)
+                    addTimesheetToView(timesheet)
+                }
+            }
+            .addOnFailureListener { e ->
+                showError("Failed to retrieve timesheets: ${e.message}")
+            }
     }
 }

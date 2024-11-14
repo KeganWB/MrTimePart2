@@ -1,5 +1,6 @@
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Base64
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -11,8 +12,39 @@ data class TimeSheetData(
     val endDate: String,
     val description: String,
     val category: String,
-    val image: ByteArray? = null
+    private val imageBase64: String? = null // Store image as Base64 string
 ) : Parcelable {
+
+    // Convert Base64 to ByteArray
+    val image: ByteArray?
+        get() = imageBase64?.let { base64 ->
+            try {
+                Base64.decode(base64, Base64.DEFAULT)
+            } catch (e: IllegalArgumentException) {
+                null // Return null if the Base64 string is invalid
+            }
+        }
+
+    constructor(
+        name: String,
+        startTime: String,
+        endTime: String,
+        startDate: String,
+        endDate: String,
+        description: String,
+        category: String,
+        image: ByteArray?
+    ) : this(
+        name,
+        startTime,
+        endTime,
+        startDate,
+        endDate,
+        description,
+        category,
+        image?.let { Base64.encodeToString(it, Base64.DEFAULT) } // Convert to Base64 string
+    )
+
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -21,7 +53,7 @@ data class TimeSheetData(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.createByteArray()
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -32,7 +64,7 @@ data class TimeSheetData(
         parcel.writeString(endDate)
         parcel.writeString(description)
         parcel.writeString(category)
-        parcel.writeByteArray(image)
+        parcel.writeString(imageBase64) // Write Base64 string
     }
 
     override fun describeContents(): Int = 0
@@ -49,7 +81,7 @@ data class TimeSheetData(
             val end = dateFormat.parse(endTime) ?: return 0.0
 
             var diffInMillis = end.time - start.time
-            //This checks for if its the next day to add 24 hrs
+            // Handle overnight shifts
             if (diffInMillis < 0) {
                 diffInMillis += 24 * 60 * 60 * 1000
             }
@@ -59,5 +91,4 @@ data class TimeSheetData(
             0.0
         }
     }
-
 }

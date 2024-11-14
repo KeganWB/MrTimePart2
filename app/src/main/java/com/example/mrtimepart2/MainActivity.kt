@@ -12,12 +12,15 @@ import com.example.mrtimepart2.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var toggle: ActionBarDrawerToggle
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         val toolbar = binding.toolbar
+
+
 
         //Martins special login code ( KEEP SAFE )
         val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
@@ -61,7 +66,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_timesheets -> {
 
-                    startActivity(Intent(this, TimeSheetActivity::class.java))
+                    if(currentUser!= null) // Sends current firebase User to timesheet activity
+                    {
+                        val userId = currentUser.uid
+                        val intent = Intent(this, TimeSheetActivity::class.java)
+                        intent.putExtra("USER_ID",userId)
+                        startActivity(intent)
+                    }
                 }
                 R.id.nav_goals -> {
 

@@ -20,6 +20,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
@@ -35,6 +37,7 @@ class AddTimeSheetActivity : DialogFragment() {
     }
 
     private lateinit var imagePreview: ImageView
+    var db = Firebase.firestore
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireActivity().layoutInflater
@@ -109,12 +112,14 @@ class AddTimeSheetActivity : DialogFragment() {
             val description = editTextDescription.text.toString()
             val category = spinnerCategory.selectedItem.toString()
 
+            // Convert the image to a byte array
             val imageByteArray = (imagePreview.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                 stream.toByteArray()
             }
 
+            // Create a new TimeSheetData instance
             val timeSheetData = TimeSheetData(
                 name = name,
                 startTime = startTime,
@@ -123,9 +128,10 @@ class AddTimeSheetActivity : DialogFragment() {
                 endDate = endDate,
                 description = description,
                 category = category,
-                image = imageByteArray
+                image = imageByteArray // Pass the byte array, will be converted to Base64 internally
             )
-
+            db.collection("User")
+                .add(timeSheetData)
             // Notify listener about the new timesheet data
             listener?.onTimesheetAdded(timeSheetData)
             dismiss()
@@ -215,4 +221,6 @@ class AddTimeSheetActivity : DialogFragment() {
             }
         }
     }
+
+
 }
