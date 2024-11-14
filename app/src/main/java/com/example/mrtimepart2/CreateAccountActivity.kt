@@ -21,13 +21,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.firebase.auth.FirebaseAuth
 
 class CreateAccountActivity : ComponentActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
+
         setContent {
-            MaterialTheme { // Use Material 3 theme
+            MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -45,113 +53,71 @@ class CreateAccountActivity : ComponentActivity() {
             factory = { ctx ->
                 val mainLayout = LinearLayout(ctx).apply {
                     orientation = LinearLayout.VERTICAL
-                    setBackgroundColor(Color.parseColor("#222121"))
+                    setBackgroundColor(Color.parseColor("#0C1424"))
                     gravity = Gravity.CENTER_HORIZONTAL
                     setPadding(40, 0, 40, 0)
                 }
 
-                // Create Account Text
                 val createAccountText = TextView(ctx).apply {
                     text = "Create Account"
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                     textSize = 24f
                 }
-                mainLayout.addView(createAccountText, LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 20
-                    weight = 1f
-                })
+                mainLayout.addView(createAccountText)
 
-                // Email Input Field
                 val editTextEmail = EditText(ctx).apply {
                     hint = "Email"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
+                    setTextColor(Color.parseColor("#e45a66"))
                 }
-                mainLayout.addView(editTextEmail, LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 20
-                    weight = 1f
-                })
+                mainLayout.addView(editTextEmail)
 
-                // Password Input Field
                 val editTextPassword = EditText(ctx).apply {
                     hint = "Password"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
-                    inputType = InputType.TYPE_CLASS_TEXT or
-                            InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    setTextColor(Color.parseColor("#e45a66"))
+                    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
-                mainLayout.addView(editTextPassword, LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 20
-                    weight = 1f
-                })
+                mainLayout.addView(editTextPassword)
 
-                // Confirm Password Input Field
                 val editTextConfirmPassword = EditText(ctx).apply {
                     hint = "Confirm Password"
                     setHintTextColor(Color.GRAY)
-                    setTextColor(Color.WHITE)
-                    inputType = InputType.TYPE_CLASS_TEXT or
-                            InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    setTextColor(Color.parseColor("#e45a66"))
+                    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
-                mainLayout.addView(editTextConfirmPassword, LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 20
-                    weight = 1f
-                })
+                mainLayout.addView(editTextConfirmPassword)
 
-                // Create Account Button
                 val buttonCreateAccount = Button(ctx).apply {
                     text = "Create Account"
-                    setBackgroundColor(Color.parseColor("#4CAF50")) // Green color
-                    setTextColor(Color.WHITE)
+                    setBackgroundColor(Color.parseColor("#e45a66"))
+                    setTextColor(Color.parseColor("#FFFFFFFF"))
                     setOnClickListener {
-                        val email = editTextEmail.text.toString().trim().toLowerCase()
+                        val email = editTextEmail.text.toString().trim()
                         val password = editTextPassword.text.toString().trim()
                         val confirmPassword = editTextConfirmPassword.text.toString().trim()
 
                         if (password == confirmPassword) {
-                            val sharedPref =
-                                ctx.getSharedPreferences("user_data", Context.MODE_PRIVATE)
-                            val editor = sharedPref.edit()
-                            editor.putString("email", email)
-                            editor.putString("password", password)
-                            editor.apply()
-
-                            Log.d("CreateAccountActivity", "Email: $email, Password: $password") // Log for debugging
-
-                            Toast.makeText(ctx, "Account created successfully", Toast.LENGTH_SHORT)
-                                .show()
-                            ctx.startActivity(Intent(ctx, LoginPage::class.java))
-                            (ctx as CreateAccountActivity).finish()
+                            auth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(ctx, "Account created successfully", Toast.LENGTH_SHORT).show()
+                                        ctx.startActivity(Intent(ctx, LoginPage::class.java))
+                                        (ctx as CreateAccountActivity).finish()
+                                    } else {
+                                        Toast.makeText(ctx, "Account creation failed", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
                         } else {
                             Toast.makeText(ctx, "Passwords do not match", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-                mainLayout.addView(buttonCreateAccount, LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 20
-                    weight = 1f
-                })
+                mainLayout.addView(buttonCreateAccount)
 
                 mainLayout
             },
-            update = { view ->
-                // Update the view if needed (not required in this case)
-            }
+            update = {}
         )
     }
 }

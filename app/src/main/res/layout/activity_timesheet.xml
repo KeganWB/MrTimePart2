@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColour"
+    android:orientation="vertical">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backArrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/TextColour"
+        app:srcCompat="@drawable/ic_back" />
+
+    <ScrollView
+        android:id="@+id/scrollTimeSheets"
+        android:layout_width="match_parent"
+        android:layout_height="422dp">
+
+        <LinearLayout
+            android:id="@+id/timesheetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:clickable="true"
+        app:backgroundTint="@color/TextColour"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <TextView
+        android:id="@+id/textViewSort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:text="Sort By "
+        android:textColor="#FFFFFF" />
+
+
+    <Spinner
+        android:id="@+id/spinnerSort"
+        android:layout_width="134dp"
+        android:layout_height="43dp"
+        android:background="#E35A66" />
+
+    <TextView
+        android:id="@+id/textViewTotalHours"
+        android:layout_width="360dp"
+        android:layout_height="113dp"
+        android:padding="16dp"
+        android:text="Total Hours: 0"
+        android:textColor="#FFFFFF"
+        android:visibility="visible" />
+
+</LinearLayout>
