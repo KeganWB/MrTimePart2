@@ -130,7 +130,7 @@ class AddTimeSheetActivity : DialogFragment() {
                 category = category,
                 image = imageByteArray // Pass the byte array, will be converted to Base64 internally
             )
-            db.collection("User")
+            db.collection("timesheets")
                 .add(timeSheetData)
             // Notify listener about the new timesheet data
             listener?.onTimesheetAdded(timeSheetData)

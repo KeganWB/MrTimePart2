@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
@@ -43,6 +44,14 @@ class TimeSheetActivity : AppCompatActivity() {
         val userId = intent.getStringExtra("USER_ID") ?: return
 
         firestore = FirebaseFirestore.getInstance()  // Initialize Firestore
+        Log.d("AddTimeSheetActivity", "Retrieving timesheet data")
+        firestore.collection("timesheets").get()
+            .addOnSuccessListener { result ->
+                Log.d("AddTimeSheetActivity", "Timesheets retrieved: ${result.size()}")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AddTimeSheetActivity", "Error retrieving timesheets", exception)
+            }
 
         timesheetContainer = findViewById(R.id.timesheetContainer)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
