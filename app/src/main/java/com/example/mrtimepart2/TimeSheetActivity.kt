@@ -165,19 +165,17 @@ class TimeSheetActivity : AppCompatActivity() {
 
     private fun sortTimesheets(category: String) {
         timesheetContainer.removeAllViews()
-        totalHoursTextView.visibility = View.VISIBLE // Show the total hours TextView
+        totalHoursTextView.visibility = View.VISIBLE
 
-        val sortedList = if (category == "All") {
-            timesheetList
-        } else {
-            timesheetList.filter { it.category == category }
+        val filteredList = when (category) {
+            "All" -> timesheetList
+            else -> timesheetList.filter { it.category == category }
         }.sortedBy { it.startDate }
 
-        val totalHours = calculateTotalHours(sortedList)
-
+        val totalHours = calculateTotalHours(filteredList)
         totalHoursTextView.text = "Total Hours: $totalHours"
 
-        sortedList.forEach { timesheet -> addTimesheetToView(timesheet) }
+        filteredList.forEach { timesheet -> addTimesheetToView(timesheet) }
     }
 
     private fun showDateInputDialog() {
@@ -355,7 +353,9 @@ class TimeSheetActivity : AppCompatActivity() {
     }
 
     private fun retrieveTimesheetsFromFirestore() {
-        firestore.collection("timesheets")
+        val userId = intent.getStringExtra("USER_ID") ?: return
+
+        firestore.collection("users").document(userId).collection("timesheets")
             .get()
             .addOnSuccessListener { snapshot ->
                 timesheetList.clear()

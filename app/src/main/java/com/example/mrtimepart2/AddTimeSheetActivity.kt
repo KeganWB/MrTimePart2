@@ -21,6 +21,8 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -130,11 +132,28 @@ class AddTimeSheetActivity : DialogFragment() {
                 category = category,
                 image = imageByteArray // Pass the byte array, will be converted to Base64 internally
             )
-            db.collection("timesheets")
-                .add(timeSheetData)
-            // Notify listener about the new timesheet data
-            listener?.onTimesheetAdded(timeSheetData)
-            dismiss()
+
+            // Get the current user's ID
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                val userId = currentUser.uid
+
+                // Reference the Firestore subcollection
+                val timesheetRef = db.collection("users").document(userId).collection("timesheets")
+
+                // Add a new timesheet document
+                timesheetRef.add(timeSheetData)
+                    .addOnSuccessListener { documentReference ->
+                        Toast.makeText(requireContext(), "Timesheet added!", Toast.LENGTH_SHORT).show()
+                        listener?.onTimesheetAdded(timeSheetData)
+                        dismiss()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(requireContext(), "Error adding timesheet: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(requireContext(), "User not authenticated", Toast.LENGTH_SHORT).show()
+            }
         }
 
 
