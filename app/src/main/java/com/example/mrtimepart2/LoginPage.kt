@@ -65,7 +65,6 @@ class LoginPage : ComponentActivity() {
                 }
                 mainLayout.addView(logo, LinearLayout.LayoutParams(600, 600).apply {
                     topMargin = 50
-                    weight = 2f
                 })
 
                 val signInText = TextView(ctx).apply {
@@ -73,21 +72,37 @@ class LoginPage : ComponentActivity() {
                     setTextColor(Color.parseColor("#e45a66"))
                     textSize = 24f
                 }
-                mainLayout.addView(signInText)
+                mainLayout.addView(signInText, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 20
+                    gravity = Gravity.CENTER_HORIZONTAL
+                })
 
                 val welcomeText = TextView(ctx).apply {
                     text = "Hi there! Nice to see you again"
                     setTextColor(Color.parseColor("#e45a66"))
                     textSize = 16f
                 }
-                mainLayout.addView(welcomeText)
+                mainLayout.addView(welcomeText, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = Gravity.CENTER_HORIZONTAL
+                })
 
                 val editTextEmail = EditText(ctx).apply {
                     hint = "Email"
                     setHintTextColor(Color.GRAY)
                     setTextColor(Color.parseColor("#e45a66"))
                 }
-                mainLayout.addView(editTextEmail)
+                mainLayout.addView(editTextEmail, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 20
+                })
 
                 val editTextPassword = EditText(ctx).apply {
                     hint = "Password"
@@ -95,7 +110,12 @@ class LoginPage : ComponentActivity() {
                     setTextColor(Color.parseColor("#e45a66"))
                     inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
-                mainLayout.addView(editTextPassword)
+                mainLayout.addView(editTextPassword, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 20
+                })
 
                 val buttonSignIn = Button(ctx).apply {
                     text = "Sign In"
@@ -116,7 +136,12 @@ class LoginPage : ComponentActivity() {
                             }
                     }
                 }
-                mainLayout.addView(buttonSignIn)
+                mainLayout.addView(buttonSignIn, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 20
+                })
 
                 val buttonCreateAccount = Button(ctx).apply {
                     text = "Create Account"
@@ -126,7 +151,12 @@ class LoginPage : ComponentActivity() {
                         ctx.startActivity(Intent(ctx, CreateAccountActivity::class.java))
                     }
                 }
-                mainLayout.addView(buttonCreateAccount)
+                mainLayout.addView(buttonCreateAccount, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 10
+                })
 
                 mainLayout
             },
