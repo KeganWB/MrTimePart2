@@ -1,14 +1,9 @@
 package com.example.mrtimepart2
 
 import android.Manifest
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -16,8 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -42,17 +35,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Log.d("MainActivity", "onCreate called")
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "YOUR_CHANNEL_ID",
-                "Channel Name",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-            Log.d("MainActivity", "Notification channel created")
-        }
 
         checkAndRequestPermissions()
 
@@ -93,14 +75,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_goals -> {
                     startActivity(Intent(this, HoursActivity::class.java))
-                    sendNotification()
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
-
-        setupAlarm()
     }
 
     private fun checkAndRequestPermissions() {
@@ -138,44 +117,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun sendNotification() {
-        Log.d("MainActivity", "sendNotification called")
-        val builder = NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
-            .setSmallIcon(R.drawable.mr_time)
-            .setContentTitle("Notification Title")
-            .setContentText("Notification Content")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        val notificationManager = NotificationManagerCompat.from(this)
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                PERMISSIONS_REQUEST_CODE
-            )
-            return
-        }
-        notificationManager.notify(1, builder.build())
-        Log.d("MainActivity", "Notification sent")
-    }
-
-    private fun setupAlarm() {
-        Log.d("MainActivity", "Setting up alarm")
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60000, pendingIntent)
-        Log.d("MainActivity", "Alarm set")
     }
 
     override fun onBackPressed() {

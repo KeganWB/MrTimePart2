@@ -15,8 +15,8 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.d("AlarmReceiver", "onReceive called")
         val builder = NotificationCompat.Builder(context!!, "YOUR_CHANNEL_ID")
             .setSmallIcon(R.drawable.mr_time)
-            .setContentTitle("Notification Title")
-            .setContentText("Notification Content")
+            .setContentTitle("Welcome")
+            .setContentText("Welcome To MrTime, Hope you enjoy your stay")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         val notificationManager = NotificationManagerCompat.from(context)
