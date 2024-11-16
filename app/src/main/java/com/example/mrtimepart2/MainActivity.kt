@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_goals -> {
                     startActivity(Intent(this, HoursActivity::class.java))
                 }
-                /*R.id.nav_graph -> { // New navigation item for GraphActivity
+                R.id.nav_graph -> {
                     startActivity(Intent(this, GraphActivity::class.java))
-                }*/
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
