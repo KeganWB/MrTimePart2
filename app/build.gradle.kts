@@ -52,7 +52,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -77,4 +76,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation("com.google.code.gson:gson:2.8.6")
 
+    //Directly add MPAndroidChart dependency
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

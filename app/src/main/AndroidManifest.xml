@@ -91,6 +91,9 @@
             android:label="@string/title_activity_create_account"
             android:theme="@style/AppTheme" />
 
+        <!--<activity android:name=".GraphActivity" />-->
+
+
     </application>
 
 </manifest>
