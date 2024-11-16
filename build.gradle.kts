@@ -6,22 +6,10 @@ plugins {
     alias(libs.plugins.google.gms.google.services) apply false
 }
 
-// everything under this line fucks shit up
-/*buildscript {
     repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+        google() // Google's Maven repository
+        mavenCentral() // Maven Central repository
+        maven("https://jitpack.io") // JitPack repository
     }
-    dependencies {
-        // Other dependencies
-    }
-}*/
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
-}
+
