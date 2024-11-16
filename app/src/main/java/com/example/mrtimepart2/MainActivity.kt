@@ -66,7 +66,12 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, HoursActivity::class.java))
                 }
                 R.id.nav_graph -> {
-                    startActivity(Intent(this, GraphActivity::class.java))
+                    if (currentUser != null) { // Sends current Firebase User to timesheet activity
+                        val userId = currentUser.uid
+                        val intent = Intent(this, GraphActivity::class.java)
+                        intent.putExtra("USER_ID", userId)
+                        startActivity(intent)
+                    }
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
