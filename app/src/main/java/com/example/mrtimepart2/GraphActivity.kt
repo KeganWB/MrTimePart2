@@ -1,11 +1,13 @@
 package com.example.mrtimepart2
 
+import TimeSheetData
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mrtimepart2.databinding.ActivityGraphsBinding
 import com.github.mikephil.charting.data.PieData
@@ -14,6 +16,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.toObject
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,11 +25,19 @@ class GraphActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGraphsBinding
     private val db = FirebaseFirestore.getInstance()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+    private val timesheetList = mutableListOf<TimeSheetData>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGraphsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val userId = intent.getStringExtra("USER_ID") ?: return
+        fetchTimesheets(userId) {
+            // Fetch "This Month" data once timesheets are loaded
+            fetchDataForSelectedPeriod("This Month")
+        }
 
         // Setup spinner
         val timePeriods = listOf("This Month", "Last Month", "Custom Range")
@@ -42,6 +53,23 @@ class GraphActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+    }
+
+    private fun fetchTimesheets(userId: String, onComplete: () -> Unit) {
+        db.collection("users").document(userId).collection("timesheets")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                timesheetList.clear()
+                for (document in snapshot) {
+                    val timesheet = document.toObject<TimeSheetData>()
+                    timesheetList.add(timesheet)
+                }
+                onComplete()  // Call onComplete after data is loaded
+            }
+            .addOnFailureListener { e ->
+                showError("Failed to retrieve timesheets: ${e.message}")
+                onComplete() // Ensure to call onComplete even on failure
+            }
     }
 
     private fun fetchDataForSelectedPeriod(selectedPeriod: String) {
@@ -70,28 +98,43 @@ class GraphActivity : AppCompatActivity() {
         queryTimesheetData(userId, dateFormat.format(startDate.time), dateFormat.format(endDate.time))
     }
 
-    private fun queryTimesheetData(userId: String, startDate: String, endDate: String) {
-        val timesheetRef = db.collection("users").document(userId).collection("timesheets")
+    private fun showError(message: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Error")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
+    }
 
-        timesheetRef
-            .whereGreaterThanOrEqualTo("startDate", startDate)
-            .whereLessThanOrEqualTo("endDate", endDate)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                val hoursWorkedMap = mutableMapOf<String, Float>()
-                querySnapshot.documents.forEach { document ->
-                    val workedHours = document.getDouble("workedHours")?.toFloat() ?: 0f
-                    val workDate = document.getString("startDate")?.let { convertStringToDate(it) }
-                    workDate?.let {
-                        val periodKey = dateFormat.format(it)
-                        hoursWorkedMap[periodKey] = (hoursWorkedMap[periodKey] ?: 0f) + workedHours
-                    }
-                }
-                updatePieChart(hoursWorkedMap)
+    //Adds Timesheets from firestore to mutable list of timesheets
+    private fun queryTimesheetData(userId: String, startDate: String, endDate: String) {
+        val start = convertStringToDate(startDate)
+        val end = convertStringToDate(endDate)
+
+        if (start == null || end == null) {
+            showError("Invalid date range")
+            return
+        }
+
+        val filteredTimesheets = timesheetList.filter {
+            val timesheetStart = convertStringToDate(it.startDate)
+            val timesheetEnd = convertStringToDate(it.endDate)
+
+            // Filter timesheets within the selected date range
+            timesheetStart != null && timesheetEnd != null &&
+                    timesheetStart >= start && timesheetEnd <= end
+        }
+
+        val hoursWorked = mutableMapOf<String, Float>()
+
+        for (timesheet in filteredTimesheets) {
+            val hours = timesheet.calculateHours().toFloat()
+            if (hours > 0) {
+                hoursWorked[timesheet.category] = hoursWorked.getOrDefault(timesheet.category, 0f) + hours
             }
-            .addOnFailureListener { e ->
-                Log.w("GraphActivity", "Error getting documents: ", e)
-            }
+        }
+
+        updatePieChart(hoursWorked)
     }
 
     private fun convertStringToDate(dateStr: String): Date? {
