@@ -2,6 +2,7 @@ package com.example.mrtimepart2
 
 import TimeSheetData
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,9 +11,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mrtimepart2.databinding.ActivityGraphsBinding
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -26,6 +31,10 @@ class GraphActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
     private val timesheetList = mutableListOf<TimeSheetData>()
+    private var minHours : Float = 0f
+    private var maxHours: Float = 0f
+    private var totalHours: Float = 0f
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +47,7 @@ class GraphActivity : AppCompatActivity() {
             // Fetch "This Month" data once timesheets are loaded
             fetchDataForSelectedPeriod("This Month")
         }
+        fetchHours(userId)//Fetches the min and Max hours for the program
 
         // Setup spinner
         val timePeriods = listOf("This Month", "Last Month", "Custom Range")
@@ -71,6 +81,19 @@ class GraphActivity : AppCompatActivity() {
                 onComplete() // Ensure to call onComplete even on failure
             }
     }
+    private fun fetchHours(userId: String)
+    {
+        db.collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val hoursData = document.get("hours") as? Map<*, *>
+                     minHours = (hoursData?.get("minHours") as? String)?.toFloatOrNull() ?: 0f
+                     maxHours = (hoursData?.get("maxHours") as? String)?.toFloatOrNull() ?: 0f
+                }
+            }
+    }
+
 
     private fun fetchDataForSelectedPeriod(selectedPeriod: String) {
         val userId = intent.getStringExtra("USER_ID") ?: return
@@ -110,7 +133,7 @@ class GraphActivity : AppCompatActivity() {
     private fun queryTimesheetData(userId: String, startDate: String, endDate: String) {
         val start = convertStringToDate(startDate)
         val end = convertStringToDate(endDate)
-
+        totalHours = 0f
         if (start == null || end == null) {
             showError("Invalid date range")
             return
@@ -131,10 +154,11 @@ class GraphActivity : AppCompatActivity() {
             val hours = timesheet.calculateHours().toFloat()
             if (hours > 0) {
                 hoursWorked[timesheet.category] = hoursWorked.getOrDefault(timesheet.category, 0f) + hours
+                totalHours += hoursWorked.getOrDefault(timesheet.category, 0f) + hours
             }
         }
 
-        updatePieChart(hoursWorked)
+        updateBarChart(totalHours,minHours,maxHours,hoursWorked)
     }
 
     private fun convertStringToDate(dateStr: String): Date? {
@@ -146,19 +170,41 @@ class GraphActivity : AppCompatActivity() {
         }
     }
 
-    private fun updatePieChart(hoursWorked: Map<String, Float>) {
+    private fun updateBarChart(totalHours:Float, minHours: Float, maxHours: Float, hoursWorked: Map<String, Float>) {
         if (hoursWorked.isEmpty()) {
-            binding.pieChart.clear()
-            binding.pieChart.setNoDataText("No data available for the selected period")
+            binding.barChart.clear()
+            binding.barChart.setNoDataText("No data available for the selected period")
             return
         }
 
-        val entries = hoursWorked.map { PieEntry(it.value, it.key) }
-        val dataSet = PieDataSet(entries, "Hours Worked").apply {
-            colors = ColorTemplate.COLORFUL_COLORS.toList()
+        val entries = listOf(
+            BarEntry(1f, maxHours),
+            BarEntry(2f, totalHours),
+            BarEntry(3f, minHours)
+        )
+        val labels = listOf("Max Hours", "Total Hours", "Min Hours" )
+        val dataset = BarDataSet(entries, "Hours data").apply {
+            colors = listOf(Color.BLUE, Color.GREEN, Color.RED)
+            valueTextSize = 12f
         }
-        binding.pieChart.data = PieData(dataSet)
-        binding.pieChart.invalidate()
+        val barData = BarData(dataset).apply{
+            barWidth = 0.4f
+        }
+        val xAxis = binding.barChart.xAxis
+        xAxis.granularity = 1f
+        xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+
+        // Use a ValueFormatter for the XAxis
+        xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return labels.getOrNull(value.toInt() - 1) ?: value.toString()
+            }
+        }
+
+        // Set data to BarChart
+        binding.barChart.data = barData
+        binding.barChart.description.text = "Bar graph view of hours worked versus goals"
+        binding.barChart.invalidate() // Refresh the chart
     }
 
     private fun showDateRangePicker(userId: String) {
