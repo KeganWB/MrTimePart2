@@ -11,6 +11,16 @@ buildscript{
         mavenCentral() // Maven Central repository
         maven("https://jitpack.io") // JitPack repository
     }
+    dependencies{
+        classpath("com.google.gms:google-services:4.3.15")
+    }
+}
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
 }
 
 
