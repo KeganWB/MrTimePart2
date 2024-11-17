@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -75,8 +76,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation("com.google.code.gson:gson:2.8.6")
-
-    //Directly add MPAndroidChart dependency
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     apply(plugin = "com.google.gms.google-services")
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
 }
