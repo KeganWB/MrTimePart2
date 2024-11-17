@@ -52,7 +52,7 @@ class GraphActivity : AppCompatActivity() {
         val userId = intent.getStringExtra("USER_ID") ?: return
         fetchHours(userId)//Fetches the min and Max hours for the program
         fetchTimesheets(userId) {
-            // Fetch "This Month" data once timesheets are loaded
+
             fetchDataForSelectedPeriod("This Month")
         }
 
@@ -84,7 +84,7 @@ class GraphActivity : AppCompatActivity() {
                     val timesheet = document.toObject<TimeSheetData>()
                     timesheetList.add(timesheet)
                 }
-                onComplete()  // Call onComplete after data is loaded
+                onComplete()
             }
             .addOnFailureListener { e ->
                 showError("Failed to retrieve timesheets: ${e.message}")
@@ -162,7 +162,7 @@ class GraphActivity : AppCompatActivity() {
             val timesheetStart = convertStringToDate(it.startDate)
             val timesheetEnd = convertStringToDate(it.endDate)
 
-            // Filter timesheets within the selected date range
+            //Filter timesheets within the selected date range
             timesheetStart != null && timesheetEnd != null &&
                     timesheetStart >= start && timesheetEnd <= end
         }
@@ -213,17 +213,17 @@ class GraphActivity : AppCompatActivity() {
         xAxis.granularity = 1f
         xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
 
-        // Use a ValueFormatter for the XAxis
+
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return labels.getOrNull(value.toInt() - 1) ?: value.toString()
             }
         }
 
-        // Set data to BarChart
+        //Sets barchart data
         binding.barChart.data = barData
-        binding.barChart.description.text = "Bar graph view of hours worked versus goals"
-        binding.barChart.invalidate() // Refresh the chart
+        binding.barChart.description.text = ""
+        binding.barChart.invalidate() //Refresh the chart
     }
 
     private fun showDateRangePicker(userId: String) {

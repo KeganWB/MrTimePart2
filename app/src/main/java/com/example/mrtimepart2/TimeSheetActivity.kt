@@ -43,7 +43,7 @@ class TimeSheetActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("USER_ID") ?: return
 
-        firestore = FirebaseFirestore.getInstance()  // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
         Log.d("AddTimeSheetActivity", "Retrieving timesheet data")
         firestore.collection("timesheets").get()
             .addOnSuccessListener { result ->

@@ -46,14 +46,14 @@ class HoursActivity : AppCompatActivity() {
     private fun saveOrUpdateHours(userId: String, minHours: String, maxHours: String) {
         userId?.let { uid ->
             val hoursData = mapOf(
-                "hours" to mapOf( // Storing under a separate "hours" field
+                "hours" to mapOf(
                     "minHours" to minHours,
                     "maxHours" to maxHours
                 )
             )
 
             firestore.collection("users").document(uid)
-                .set(hoursData, SetOptions.merge()) // Merge ensures existing data (like categories) is preserved
+                .set(hoursData, SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(this, "Hours successfully saved!", Toast.LENGTH_SHORT).show()
                     Log.d("Firestore", "Hours successfully saved/updated!")

@@ -39,13 +39,13 @@ class LoginPage : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialize Firebase Auth
+        //Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        // Send notification on login page access
+        //Send notification on login page access
         sendNotification()
 
-        // Setup alarm when login page is accessed
+        //Setup alarm when login page is accessed
         setupAlarm()
 
         setContent {
@@ -74,7 +74,7 @@ class LoginPage : ComponentActivity() {
     }
 
     private fun sendNotification() {
-        if (shouldSendNotification()) { // Check if notification should be sent
+        if (shouldSendNotification()) {
             Log.d("LoginPage", "sendNotification called")
             val builder = NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
                 .setSmallIcon(R.drawable.mr_time)

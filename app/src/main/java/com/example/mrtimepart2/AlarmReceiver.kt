@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("AlarmReceiver", "onReceive called")
         val builder = NotificationCompat.Builder(context!!, "YOUR_CHANNEL_ID")
             .setSmallIcon(R.drawable.mr_time)
             .setContentTitle("Welcome")
@@ -27,6 +26,5 @@ class AlarmReceiver : BroadcastReceiver() {
             return
         }
         notificationManager.notify(1, builder.build())
-        Log.d("AlarmReceiver", "Notification sent from AlarmReceiver")
     }
 }

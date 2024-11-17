@@ -12,20 +12,20 @@ data class TimeSheetData(
     val endDate: String = "",
     val description: String = "",
     val category: String = "",
-    private val imageBase64: String? = null // Store image as Base64 string
+    private val imageBase64: String? = null
 ) : Parcelable {
 
-    // Convert Base64 to ByteArray
+
     val image: ByteArray?
         get() = imageBase64?.let { base64 ->
             try {
                 Base64.decode(base64, Base64.DEFAULT)
             } catch (e: IllegalArgumentException) {
-                null // Return null if the Base64 string is invalid
+                null
             }
         }
 
-    // Constructor for ByteArray image
+
     constructor(
         name: String,
         startTime: String,
@@ -43,7 +43,7 @@ data class TimeSheetData(
         endDate,
         description,
         category,
-        image?.let { Base64.encodeToString(it, Base64.DEFAULT) } // Convert to Base64 string
+        image?.let { Base64.encodeToString(it, Base64.DEFAULT) }
     )
 
     // Parcelable implementation
@@ -66,7 +66,7 @@ data class TimeSheetData(
         parcel.writeString(endDate)
         parcel.writeString(description)
         parcel.writeString(category)
-        parcel.writeString(imageBase64) // Write Base64 string
+        parcel.writeString(imageBase64)
     }
 
     override fun describeContents(): Int = 0
@@ -76,7 +76,7 @@ data class TimeSheetData(
         override fun newArray(size: Int): Array<TimeSheetData?> = arrayOfNulls(size)
     }
 
-    // Calculate hours method
+
     fun calculateHours(): Double {
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return try {

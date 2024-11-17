@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.nav_graph -> {
-                    if (currentUser != null) { // Sends current Firebase User to timesheet activity
+                    if (currentUser != null) { //Sends current Firebase User to timesheet activity
                         val userId = currentUser.uid
                         val intent = Intent(this, GraphActivity::class.java)
                         intent.putExtra("USER_ID", userId)
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        isNavigatingToOtherActivity = false // Reset flag
+        isNavigatingToOtherActivity = false //Reset flag
     }
 
     override fun onBackPressed() {
