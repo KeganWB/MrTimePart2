@@ -3,19 +3,18 @@ package com.example.mrtimepart2
 import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.Gravity
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,26 +25,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.auth.FirebaseAuth
-import android.content.pm.PackageManager
 
 class LoginPage : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    companion object {
+        const val PERMISSIONS_REQUEST_CODE = 123
+        const val CHANNEL_ID = "YOUR_CHANNEL_ID"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        //Initialize Firebase Auth
+        // Create notification channel
+        createNotificationChannel()
+
+        // Check and request permissions
+        checkAndRequestPermissions()
+
+        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        //Send notification on login page access
+        // Send notification on login page access
         sendNotification()
 
-        //Setup alarm when login page is accessed
+        // Setup alarm when login page is accessed
         setupAlarm()
 
         setContent {
@@ -57,6 +67,36 @@ class LoginPage : ComponentActivity() {
                     LoginPageLayout(this)
                 }
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun checkAndRequestPermissions() {
+        val permissionsNeeded = mutableListOf<String>()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.CAMERA)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.READ_MEDIA_IMAGES)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        if (permissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsNeeded.toTypedArray(), PERMISSIONS_REQUEST_CODE)
         }
     }
 
@@ -76,7 +116,7 @@ class LoginPage : ComponentActivity() {
     private fun sendNotification() {
         if (shouldSendNotification()) {
             Log.d("LoginPage", "sendNotification called")
-            val builder = NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.mr_time)
                 .setContentTitle("Welcome")
                 .setContentText("Welcome To MrTime, Hope you enjoy your stay")
@@ -90,7 +130,7 @@ class LoginPage : ComponentActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    MainActivity.PERMISSIONS_REQUEST_CODE
+                    PERMISSIONS_REQUEST_CODE
                 )
                 return
             }

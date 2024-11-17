@@ -1,9 +1,9 @@
 package com.example.mrtimepart2
 
-import android.content.pm.PackageManager
 import android.Manifest
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -13,13 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.mrtimepart2.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val PERMISSIONS_REQUEST_CODE = 123
+        const val CHANNEL_ID = "YOUR_CHANNEL_ID"
     }
 
     private var isNavigatingToOtherActivity = false
@@ -42,17 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("MainActivity", "onCreate called")
 
-        checkAndRequestPermissions()
-
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
         val toolbar = binding.toolbar
 
-
         //Martins special login code ( KEEP SAFE )
         val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userName = sharedPref.getString("email", "")
-
 
         setSupportActionBar(toolbar)
 
@@ -66,28 +60,22 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         navView.setNavigationItemSelectedListener { menuItem ->
             isNavigatingToOtherActivity = true
             when (menuItem.itemId) {
                 R.id.nav_home -> {
-
                     startActivity(Intent(this, MainActivity::class.java))
                 }
                 R.id.nav_categories -> {
-
                     startActivity(Intent(this, Category::class.java))
                 }
                 R.id.nav_timesheets -> {
-
-                    if(currentUser!= null) 
-                    {
+                    if(currentUser != null) {
                         val userId = currentUser.uid
                         val intent = Intent(this, TimeSheetActivity::class.java)
-                        intent.putExtra("USER_ID",userId)
+                        intent.putExtra("USER_ID", userId)
                         startActivity(intent)
                     }
                 }
@@ -122,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        isNavigatingToOtherActivity = false //Reset flag
+        isNavigatingToOtherActivity = false // Reset flag
     }
 
     override fun onBackPressed() {
@@ -130,24 +118,6 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
-        }
-    }
-
-    private fun checkAndRequestPermissions() {
-        val permissionsNeeded = mutableListOf<String>()
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.CAMERA)
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.READ_MEDIA_IMAGES)
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.POST_NOTIFICATIONS)
-        }
-
-        if (permissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissionsNeeded.toTypedArray(), PERMISSIONS_REQUEST_CODE)
         }
     }
 
@@ -159,12 +129,10 @@ class MainActivity : AppCompatActivity() {
                 for (i in permissions.indices) {
                     perms[permissions[i]] = grantResults[i]
                 }
-                if (perms[Manifest.permission.CAMERA] == PackageManager.PERMISSION_GRANTED &&
-                    perms[Manifest.permission.READ_MEDIA_IMAGES] == PackageManager.PERMISSION_GRANTED &&
-                    perms[Manifest.permission.POST_NOTIFICATIONS] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("MainActivity", "All permissions granted")
+                if (perms[Manifest.permission.POST_NOTIFICATIONS] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("MainActivity", "Notification permission granted")
                 } else {
-                    Toast.makeText(this, "Some permissions are denied. The app might not work properly.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Notification permission denied", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -172,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendGoodbyeNotification() {
         Log.d("MainActivity", "sendGoodbyeNotification called")
-        val builder = NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.mr_time)
             .setContentTitle("Goodbye")
             .setContentText("Sorry to see you go, have you completed everything you wanted to do?")
@@ -202,6 +170,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
