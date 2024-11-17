@@ -53,10 +53,11 @@ class LoginPage : ComponentActivity() {
         auth = FirebaseAuth.getInstance()
 
         // Send notification on login page access
-        sendNotification()
+
 
         // Setup alarm when login page is accessed
         setupAlarm()
+        sendNotification()
 
         setContent {
             MaterialTheme {
