@@ -63,7 +63,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.nav_goals -> {
-                    startActivity(Intent(this, HoursActivity::class.java))
+                    if(currentUser != null) {
+                        val userId = currentUser.uid
+                        val intent = Intent(this, HoursActivity::class.java)
+                        intent.putExtra("USER_ID", userId)
+                        startActivity(intent)
+                    }
                 }
                 R.id.nav_graph -> {
                     if (currentUser != null) { // Sends current Firebase User to timesheet activity
