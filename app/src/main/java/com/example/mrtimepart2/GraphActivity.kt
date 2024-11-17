@@ -3,11 +3,13 @@ package com.example.mrtimepart2
 import TimeSheetData
 import android.app.DatePickerDialog
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mrtimepart2.databinding.ActivityGraphsBinding
@@ -24,7 +26,10 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.max
 
 class GraphActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGraphsBinding
@@ -34,20 +39,24 @@ class GraphActivity : AppCompatActivity() {
     private var minHours : Float = 0f
     private var maxHours: Float = 0f
     private var totalHours: Float = 0f
+    private var numberOfDays: Long = 0
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGraphsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val userId = intent.getStringExtra("USER_ID") ?: return
+        fetchHours(userId)//Fetches the min and Max hours for the program
         fetchTimesheets(userId) {
             // Fetch "This Month" data once timesheets are loaded
             fetchDataForSelectedPeriod("This Month")
         }
-        fetchHours(userId)//Fetches the min and Max hours for the program
+
+
 
         // Setup spinner
         val timePeriods = listOf("This Month", "Last Month", "Custom Range")
@@ -56,6 +65,7 @@ class GraphActivity : AppCompatActivity() {
         binding.timePeriodSpinner.adapter = adapter
 
         binding.timePeriodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedPeriod = timePeriods[position]
                 fetchDataForSelectedPeriod(selectedPeriod)
@@ -95,6 +105,7 @@ class GraphActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchDataForSelectedPeriod(selectedPeriod: String) {
         val userId = intent.getStringExtra("USER_ID") ?: return
         val calendar = Calendar.getInstance()
@@ -116,7 +127,15 @@ class GraphActivity : AppCompatActivity() {
                 showDateRangePicker(userId)
                 return
             }
+
         }
+        var startLocalDate = LocalDate.of(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH) + 1, startDate.get(Calendar.DAY_OF_MONTH))
+        val endLocalDate = LocalDate.of(endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH) + 1, endDate.get(Calendar.DAY_OF_MONTH))
+        numberOfDays = ChronoUnit.DAYS.between(startLocalDate,endLocalDate)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+        fetchHours(userId)
+        minHours *= numberOfDays
+        maxHours *= numberOfDays
 
         queryTimesheetData(userId, dateFormat.format(startDate.time), dateFormat.format(endDate.time))
     }
