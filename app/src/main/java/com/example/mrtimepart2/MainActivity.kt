@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val PERMISSIONS_REQUEST_CODE = 123
     }
+
+    private var isNavigatingToOtherActivity = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navView.setNavigationItemSelectedListener { menuItem ->
+            isNavigatingToOtherActivity = true
             when (menuItem.itemId) {
                 R.id.nav_home -> {
                     startActivity(Intent(this, MainActivity::class.java))
@@ -79,6 +84,26 @@ class MainActivity : AppCompatActivity() {
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (!isNavigatingToOtherActivity) {
+            sendGoodbyeNotification()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isNavigatingToOtherActivity = false // Reset flag
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -119,12 +144,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+    private fun sendGoodbyeNotification() {
+        Log.d("MainActivity", "sendGoodbyeNotification called")
+        val builder = NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
+            .setSmallIcon(R.drawable.mr_time)
+            .setContentTitle("Goodbye")
+            .setContentText("Sorry to see you go, have you completed everything you wanted to do?")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val notificationManager = NotificationManagerCompat.from(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                PERMISSIONS_REQUEST_CODE
+            )
+            return
         }
+        notificationManager.notify(2, builder.build())
+        Log.d("MainActivity", "Goodbye notification sent")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -135,3 +176,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
