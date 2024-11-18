@@ -7,7 +7,7 @@
     android:background="@color/backgroundColour"
     android:foregroundTint="#FBFBFB"
     android:padding="16dp">
-    
+
     <TextView
         android:id="@+id/graphTitle"
         android:layout_width="wrap_content"
