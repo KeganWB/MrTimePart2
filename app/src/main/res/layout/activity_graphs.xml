@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColour"
+    android:foregroundTint="#FBFBFB"
     android:padding="16dp">
 
     <!-- Title for the Graphs View -->
@@ -11,15 +13,30 @@
         android:id="@+id/graphTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Graphs"
+        android:textColor="@color/TextColour"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- PieChart using MPAndroidChart -->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backArrow"
+        android:layout_width="149dp"
+        android:layout_height="61dp"
+        android:clickable="true"
+        app:backgroundTint="@color/TextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014"
+        app:srcCompat="@drawable/ic_back" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
@@ -33,10 +50,14 @@
         app:layout_constraintTop_toBottomOf="@id/graphTitle"
         app:layout_constraintVertical_bias="0.083" />
 
+
     <Spinner
         android:id="@+id/timePeriodSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/TextColour"
+        android:foregroundTint="#FFFFFF"
+        android:popupBackground="@color/TextColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

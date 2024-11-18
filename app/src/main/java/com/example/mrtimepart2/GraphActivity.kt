@@ -2,6 +2,7 @@ package com.example.mrtimepart2
 
 import TimeSheetData
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
@@ -43,6 +45,7 @@ class GraphActivity : AppCompatActivity() {
 
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +59,10 @@ class GraphActivity : AppCompatActivity() {
             fetchDataForSelectedPeriod("This Month")
         }
 
-
-
         // Setup spinner
         val timePeriods = listOf("This Month", "Last Month", "Custom Range")
+        val selectedPeriod = timePeriods[0]
+        fetchDataForSelectedPeriod(selectedPeriod)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timePeriods)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.timePeriodSpinner.adapter = adapter
@@ -73,6 +76,11 @@ class GraphActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+        val fabBackGraph = findViewById<FloatingActionButton>(R.id.backArrow)
+        fabBackGraph.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
     }
 
     private fun fetchTimesheets(userId: String, onComplete: () -> Unit) {
@@ -205,11 +213,24 @@ class GraphActivity : AppCompatActivity() {
         val dataset = BarDataSet(entries, "Hours data").apply {
             colors = listOf(Color.BLUE, Color.GREEN, Color.RED)
             valueTextSize = 12f
+            valueTextColor = Color.WHITE
+
+
         }
         val barData = BarData(dataset).apply{
-            barWidth = 0.4f
+            barWidth = 0.95f
         }
+
         val xAxis = binding.barChart.xAxis
+        val yAxisLeft = binding.barChart.axisLeft
+        val yAxisRight = binding.barChart.axisRight
+        val legend = binding.barChart.legend
+
+        yAxisLeft.textColor = Color.WHITE
+        yAxisRight.textColor = Color.WHITE
+        legend.textColor = Color.WHITE
+
+        xAxis.textColor = Color.WHITE
         xAxis.granularity = 1f
         xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
 

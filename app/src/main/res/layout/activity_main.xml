@@ -17,6 +17,66 @@
             android:layout_height="wrap_content"
             android:background="@color/toolBarAndNavColour" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="52dp" />
+
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:editable="false"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="text"
+            android:text="Welcome to Mr Time!"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FAFAFA"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="match_parent"
+            android:layout_height="365dp"
+            android:background="#00FFFFFF"
+            android:clickable="false"
+            app:srcCompat="@drawable/mr_time" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <EditText
+            android:id="@+id/editTextText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:editable="false"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="text"
+            android:text="To get started, open the menu top left"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <EditText
+            android:id="@+id/editTextText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:editable="false"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="text"
+            android:text=" and select your daily goals"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
 
     </LinearLayout>
 
